@@ -1,0 +1,6 @@
+{
+  "name": "Hashforge Lab",
+  "description": "World's most advanced free crypto mining simulator with multi-coin simulation, interactive console, worldwide nodes, 42 languages support, and SEO optimization.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

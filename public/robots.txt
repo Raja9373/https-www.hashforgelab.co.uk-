@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hashforgelab.co.uk/sitemap.xml
