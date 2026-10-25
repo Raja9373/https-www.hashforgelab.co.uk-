@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Globe, Zap, Volume2, VolumeX, Share2, Award, ChevronDown } from 'lucide-react';
+import { Globe, Zap, Volume2, VolumeX, Share2, Award, ChevronDown, ShieldCheck, Clock } from 'lucide-react';
 import { LANGUAGES, Language } from '../data/languages';
 
 interface NavbarProps {
@@ -8,6 +8,7 @@ interface NavbarProps {
   isMining: boolean;
   totalUsd: number;
   onOpenShareModal: () => void;
+  onOpenAuditModal: () => void;
   soundEnabled: boolean;
   onToggleSound: () => void;
 }
@@ -18,6 +19,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   isMining,
   totalUsd,
   onOpenShareModal,
+  onOpenAuditModal,
   soundEnabled,
   onToggleSound
 }) => {
@@ -52,11 +54,26 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           </a>
 
-          <div className="hidden md:flex items-center gap-2 ml-4">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#00ff88]/10 text-[#00ff88] border border-[#00ff88]/30 shadow-[0_0_10px_rgba(0,255,136,0.2)]">
-              <span className="w-2 h-2 rounded-full bg-[#00ff88] animate-ping" />
-              LIVE • WORLDWIDE SEO
-            </span>
+          {/* 1-Minute Predictions & Audit Nav Badges */}
+          <div className="hidden lg:flex items-center gap-2 ml-3">
+            <a
+              href="#crypto-minute-predictions"
+              title="Top 20 Crypto 1-Minute Price Predictions & Status"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-[#00d4ff]/10 hover:bg-[#00d4ff]/20 text-[#00d4ff] border border-[#00d4ff]/30 shadow-[0_0_10px_rgba(0,212,255,0.2)] transition-all cursor-pointer"
+            >
+              <Clock className="w-3.5 h-3.5 text-[#00d4ff]" />
+              <span>1M PREDICTIONS</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#00ff88] animate-ping" />
+            </a>
+
+            <button
+              onClick={onOpenAuditModal}
+              title="View SEO • GEO • AEO Audit Verification"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#00ff88]/10 hover:bg-[#00ff88]/20 text-[#00ff88] border border-[#00ff88]/30 shadow-[0_0_10px_rgba(0,255,136,0.2)] transition-all cursor-pointer"
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-[#00ff88]" />
+              <span>SEO • GEO • AEO: 100%</span>
+            </button>
           </div>
         </div>
 
@@ -72,6 +89,16 @@ export const Navbar: React.FC<NavbarProps> = ({
               </span>
             </div>
           )}
+
+          {/* Audit trigger on mobile/tablet */}
+          <button
+            onClick={onOpenAuditModal}
+            className="lg:hidden flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white/[0.05] border border-[#00ff88]/30 text-[#00ff88] text-xs font-mono font-semibold"
+            title="SEO • GEO • AEO Audit"
+          >
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span className="text-[10px]">AUDIT</span>
+          </button>
 
           {/* Sound Toggle */}
           <button
@@ -90,7 +117,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-[#00ff88] to-[#00d4ff] text-black font-semibold text-xs tracking-wide shadow-[0_0_15px_rgba(0,255,136,0.35)] hover:shadow-[0_0_25px_rgba(0,255,136,0.6)] hover:scale-105 transition-all duration-200"
           >
             <Share2 className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">SHARE & EARN</span>
+            <span className="hidden sm:inline">SHARE &amp; EARN</span>
             <span className="sm:hidden">SHARE</span>
           </button>
 

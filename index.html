@@ -3,24 +3,79 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Safe Fetch Setter Shim: Prevents 3rd-party ad scripts from throwing TypeError on getter-only window.fetch -->
+    <script>
+      (function() {
+        try {
+          var _origFetch = window.fetch ? window.fetch.bind(window) : null;
+          var _activeFetch = _origFetch;
+          
+          Object.defineProperty(window, 'fetch', {
+            get: function() {
+              return _activeFetch || _origFetch;
+            },
+            set: function(val) {
+              _activeFetch = val;
+            },
+            configurable: true,
+            enumerable: true
+          });
+        } catch (e1) {
+          try {
+            var _cur = window.fetch;
+            Object.defineProperty(Window.prototype, 'fetch', {
+              get: function() { return _cur; },
+              set: function(v) { _cur = v; },
+              configurable: true,
+              enumerable: true
+            });
+          } catch (e2) {}
+        }
+
+        // Suppress unhandled getter error if raised in isolated contexts
+        window.addEventListener('error', function(event) {
+          if (event && event.message && event.message.indexOf('fetch') !== -1 && event.message.indexOf('getter') !== -1) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            return true;
+          }
+        }, true);
+      })();
+    </script>
 
     <!-- Monetag Verification & Earning - LIVE -->
     <meta name="monetag" content="45008887806f519d45de53e92c0427d2" />
     <script src="https://quge5.com/88/tag.min.js" data-zone="273220" async data-cfasync="false"></script>
 
-    <!-- SUPER SEO - Worldwide Ranking -->
-    <title>Hashforge Lab - Free Crypto Mining Simulator | Mine Bitcoin, Ethereum, Solana Free | 42 Languages | hashforgelab.co.uk</title>
-    <meta name="description" content="World's #1 FREE Crypto Mining Simulator. Mine BTC, ETH, SOL, DOGE & 12+ coins free - No hardware, No electricity bill. 100% safe educational simulation. 42 languages, trusted in 180+ countries. Start mining at hashforgelab.co.uk - No wallet needed!" />
-    <meta name="keywords" content="free crypto mining, free bitcoin mining, bitcoin mining simulator, free mining simulator, crypto mining game, free ethereum mining, solana mining free, dogecoin mining free, no hardware mining, browser mining, free mining without investment, crypto mining simulator free, worldwide mining, hashforge lab, hashforgelab.co.uk, free mining app, crypto mining educational, 42 languages mining, free mining UK, free mining India" />
-    <meta name="author" content="Hashforge Lab - hashforgelab.co.uk" />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <!-- SEO: Title & Meta Description (Length & CTR Optimized) -->
+    <title>Hashforge Lab – Free Crypto Mining Simulator | BTC ETH SOL</title>
+    <meta name="description" content="World's #1 free crypto mining simulator. Mine Bitcoin, Ethereum &amp; Solana with zero hardware load and 0 electricity bills. 42 languages, 100% safe." />
+    <meta name="keywords" content="free crypto mining, free bitcoin mining simulator, top 20 crypto 1 minute price prediction, which crypto will rise next minute, crypto rising and falling status live, real time 1 minute crypto trend forecaster, mine ethereum free online, solana mining simulator, dogecoin free mining, फ्री बिटकॉइन माइनिंग, हर मिनट क्रिप्टो प्रेडिक्शन, कौन सा कॉइन ऊपर जाएगा और कौन सा नीचे, मुफ्त क्रिप्टो माइनिंग, minería de criptomonedas gratis, prediccion de criptomonedas cada minuto, que criptomoneda subira o bajara, simulador mineria bitcoin, تعدين بيتكوين مجاني, محاكي تعدين العملات الرقمية, minage crypto gratuit, kostenloses krypto mining, бесплатный майнинг криптовалют, 無料暗号資産マイニング, mineração de criptomoedas grátis, 免费加密货币挖矿, ücretsiz kripto madenciliği, đào coin miễn phí, mining kripto gratis, ขุดคริปโตฟรี, darmowy mining kryptowalut, gratis crypto mining, безкоштовний майнінг, 무료 크립토 채굴, mining criptovalute gratuito, مفت بٹ کوائن مائننگ, ফ্রি ক্রিপ্টো মাইনিং, hashforgelab.co.uk" />
+    <meta name="author" content="Hashforge Lab" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large" />
+    <meta name="bingbot" content="index, follow" />
     <meta name="language" content="English" />
-    <meta name="geo.region" content="GB, US, IN, BR, NG, DE, FR, ES, RU, JP, SA, TR, CN" />
-    <meta name="geo.placename" content="Worldwide" />
-    <link rel="canonical" href="https://hashforgelab.co.uk/" />
-    <link rel="alternate" href="https://www.hashforgelab.co.uk/" hreflang="x-default" />
+    <meta name="theme-color" content="#00ff88" />
 
-    <!-- Hreflang for 42 Languages - Worldwide SEO -->
+    <!-- GEO Optimization: Standard W3C & Dublin Core Geo Tags -->
+    <meta name="geo.region" content="GB" />
+    <meta name="geo.placename" content="London, United Kingdom" />
+    <meta name="geo.position" content="51.5074;-0.1278" />
+    <meta name="ICBM" content="51.5074, -0.1278" />
+
+    <!-- Favicon & Mobile Web App Manifest -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Canonical & Universal x-default Resolution -->
+    <link rel="canonical" href="https://hashforgelab.co.uk/" />
+    <link rel="alternate" hreflang="x-default" href="https://hashforgelab.co.uk/" />
+
+    <!-- GEO / Hreflang for 42 Languages (ISO 639-1 / BCP 47) -->
     <link rel="alternate" hreflang="en" href="https://hashforgelab.co.uk/?lang=en" />
     <link rel="alternate" hreflang="hi" href="https://hashforgelab.co.uk/?lang=hi" />
     <link rel="alternate" hreflang="es" href="https://hashforgelab.co.uk/?lang=es" />
@@ -32,11 +87,46 @@
     <link rel="alternate" hreflang="pt" href="https://hashforgelab.co.uk/?lang=pt" />
     <link rel="alternate" hreflang="zh" href="https://hashforgelab.co.uk/?lang=zh" />
     <link rel="alternate" hreflang="tr" href="https://hashforgelab.co.uk/?lang=tr" />
+    <link rel="alternate" hreflang="en-NG" href="https://hashforgelab.co.uk/?lang=ng" />
+    <link rel="alternate" hreflang="bn" href="https://hashforgelab.co.uk/?lang=bn" />
+    <link rel="alternate" hreflang="ur" href="https://hashforgelab.co.uk/?lang=ur" />
+    <link rel="alternate" hreflang="it" href="https://hashforgelab.co.uk/?lang=it" />
+    <link rel="alternate" hreflang="ko" href="https://hashforgelab.co.uk/?lang=ko" />
+    <link rel="alternate" hreflang="vi" href="https://hashforgelab.co.uk/?lang=vi" />
+    <link rel="alternate" hreflang="id" href="https://hashforgelab.co.uk/?lang=id" />
+    <link rel="alternate" hreflang="th" href="https://hashforgelab.co.uk/?lang=th" />
+    <link rel="alternate" hreflang="pl" href="https://hashforgelab.co.uk/?lang=pl" />
+    <link rel="alternate" hreflang="nl" href="https://hashforgelab.co.uk/?lang=nl" />
+    <link rel="alternate" hreflang="uk" href="https://hashforgelab.co.uk/?lang=uk" />
+    <link rel="alternate" hreflang="ro" href="https://hashforgelab.co.uk/?lang=ro" />
+    <link rel="alternate" hreflang="el" href="https://hashforgelab.co.uk/?lang=el" />
+    <link rel="alternate" hreflang="cs" href="https://hashforgelab.co.uk/?lang=cs" />
+    <link rel="alternate" hreflang="sv" href="https://hashforgelab.co.uk/?lang=sv" />
+    <link rel="alternate" hreflang="hu" href="https://hashforgelab.co.uk/?lang=hu" />
+    <link rel="alternate" hreflang="tl" href="https://hashforgelab.co.uk/?lang=tl" />
+    <link rel="alternate" hreflang="fa" href="https://hashforgelab.co.uk/?lang=fa" />
+    <link rel="alternate" hreflang="sw" href="https://hashforgelab.co.uk/?lang=sw" />
+    <link rel="alternate" hreflang="he" href="https://hashforgelab.co.uk/?lang=he" />
+    <link rel="alternate" hreflang="ms" href="https://hashforgelab.co.uk/?lang=ms" />
+    <link rel="alternate" hreflang="fi" href="https://hashforgelab.co.uk/?lang=fi" />
+    <link rel="alternate" hreflang="da" href="https://hashforgelab.co.uk/?lang=da" />
+    <link rel="alternate" hreflang="no" href="https://hashforgelab.co.uk/?lang=no" />
+    <link rel="alternate" hreflang="ta" href="https://hashforgelab.co.uk/?lang=ta" />
+    <link rel="alternate" hreflang="te" href="https://hashforgelab.co.uk/?lang=te" />
+    <link rel="alternate" hreflang="mr" href="https://hashforgelab.co.uk/?lang=mr" />
+    <link rel="alternate" hreflang="pa" href="https://hashforgelab.co.uk/?lang=pa" />
+    <link rel="alternate" hreflang="gu" href="https://hashforgelab.co.uk/?lang=gu" />
+    <link rel="alternate" hreflang="ml" href="https://hashforgelab.co.uk/?lang=ml" />
+    <link rel="alternate" hreflang="ha" href="https://hashforgelab.co.uk/?lang=ha" />
 
-    <!-- Open Graph - WhatsApp, Facebook, Telegram Preview -->
-    <meta property="og:title" content="Hashforge Lab - World's Most Advanced FREE Mining Lab | 42 Languages" />
-    <meta property="og:description" content="⚡ No hardware. No electricity. Mine Bitcoin, Ethereum, Solana FREE! 100% safe simulation. 1.2M+ miners in 180+ countries. Start FREE at hashforgelab.co.uk" />
-    <meta property="og:image" content="https://hashforgelab.co.uk/og-image.jpg" />
+    <!-- Open Graph (WhatsApp, Telegram, Facebook, LinkedIn, Discord) -->
+    <meta property="og:title" content="Hashforge Lab – Free Crypto Mining Simulator | BTC ETH SOL" />
+    <meta property="og:description" content="⚡ No hardware. Zero electricity. Simulate Bitcoin, Ethereum, Solana &amp; 12+ coins free. 100% safe educational simulation in 42 languages." />
+    <meta property="og:image" content="https://hashforgelab.co.uk/og-image.svg" />
+    <meta property="og:image:type" content="image/svg+xml" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Hashforge Lab Free Crypto Mining Simulator Preview" />
     <meta property="og:url" content="https://hashforgelab.co.uk/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Hashforge Lab" />
@@ -44,28 +134,279 @@
     <meta property="og:locale:alternate" content="hi_IN" />
     <meta property="og:locale:alternate" content="es_ES" />
     <meta property="og:locale:alternate" content="ar_SA" />
+    <meta property="og:locale:alternate" content="fr_FR" />
+    <meta property="og:locale:alternate" content="de_DE" />
+    <meta property="og:locale:alternate" content="ru_RU" />
+    <meta property="og:locale:alternate" content="ja_JP" />
+    <meta property="og:locale:alternate" content="pt_BR" />
+    <meta property="og:locale:alternate" content="zh_CN" />
+    <meta property="og:locale:alternate" content="tr_TR" />
 
-    <!-- Twitter Card -->
+    <!-- Twitter / X Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Hashforge Lab - Free Bitcoin Mining Simulator Worldwide" />
+    <meta name="twitter:site" content="@hashforgelab" />
+    <meta name="twitter:creator" content="@hashforgelab" />
+    <meta name="twitter:title" content="Hashforge Lab – Free Crypto Mining Simulator | BTC ETH SOL" />
     <meta name="twitter:description" content="Free crypto mining simulator - Mine BTC, ETH, SOL without hardware! 42 languages, 180+ countries. hashforgelab.co.uk" />
-    <meta name="twitter:image" content="https://hashforgelab.co.uk/og-image.jpg" />
+    <meta name="twitter:image" content="https://hashforgelab.co.uk/og-image.svg" />
+    <meta name="twitter:image:alt" content="Hashforge Lab Free Crypto Mining Simulator Banner" />
 
-    <!-- Schema.org - Google Rich Results -->
+    <!-- AEO & Search Engine Schema.org Graph (JSON-LD) -->
+    <!-- Covers WebApplication, Organization, WebSite, FAQPage, and HowTo for Generative AI Citing -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Hashforge Lab - Free Crypto Mining Simulator",
-      "url": "https://hashforgelab.co.uk",
-      "description": "World's most advanced FREE crypto mining simulator. Mine Bitcoin, Ethereum, Solana & 12+ coins without hardware. 42 languages, 180+ countries.",
-      "applicationCategory": "FinanceApplication",
-      "operatingSystem": "All",
-      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
-      "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "12849"},
-      "inLanguage": ["en","hi","es","ar","fr","de","ru","ja","pt","zh","tr","bn","ur"],
-      "availableLanguage": ["English","Hindi","Spanish","Arabic","French","German","Russian","Japanese","Portuguese","Chinese","Turkish"],
-      "keywords": "free crypto mining, bitcoin mining simulator, free mining"
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "@id": "https://hashforgelab.co.uk/#webapp",
+          "name": "Hashforge Lab - Free Crypto Mining Simulator",
+          "url": "https://hashforgelab.co.uk",
+          "description": "World's most advanced FREE crypto mining simulator. Mine Bitcoin, Ethereum, Solana & 12+ coins with zero hardware wear and no electricity costs. Available in 42 languages across 180+ countries.",
+          "applicationCategory": "FinanceApplication",
+          "operatingSystem": "All (Web Browser, Windows, macOS, Android, iOS, Linux)",
+          "browserRequirements": "Requires JavaScript. Supports Chrome, Safari, Firefox, Edge, Brave",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock"
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "bestRating": "5.0",
+            "ratingCount": "12849"
+          },
+          "featureList": [
+            "100% In-Browser Zero Hardware Load",
+            "Multi-Coin Simulation: BTC, ETH, SOL, DOGE, KAS, TON, XMR, LTC",
+            "Live Proof-of-Work SHA-256 Difficulty & Nonce Calculations",
+            "Virtual Rig Multipliers and Overclock Boosters",
+            "42 Worldwide Languages Localization",
+            "Zero Registration and No Crypto Wallet Required"
+          ],
+          "keywords": [
+            "free crypto mining", "free bitcoin mining simulator", "top 20 crypto 1 minute price prediction",
+            "which crypto will rise next minute", "crypto rising and falling status live", "real time 1 minute crypto trend forecaster",
+            "फ्री बिटकॉइन माइनिंग", "हर मिनट क्रिप्टो प्रेडिक्शन", "कौन सा कॉइन ऊपर जाएगा और कौन सा नीचे",
+            "minería de criptomonedas gratis", "prediccion de criptomonedas cada minuto", "que criptomoneda subira o bajara",
+            "تعدين بيتكوين مجاني", "minage crypto gratuit", "kostenloses krypto mining", "бесплатный майнинг криптовалют",
+            "無料暗号資産マイニング", "mineração de criptomoedas grátis", "免费加密货币挖矿", "ücretsiz kripto madenciliği",
+            "đào coin miễn phí", "mining kripto gratis", "ขุดคริปโตฟรี", "darmowy mining kryptowalut",
+            "gratis crypto mining", "безкоштовний майнінг", "minare gratuita criptomonede",
+            "δωρεαν mining", "tezba kryptomen zdarma", "gratis kryptomining", "ingyenes kriptobanyaszat",
+            "libreng pagmimina", "استخراج رایگان ارز دیجیتال", "uchimbaji wa crypto bure",
+            "כריית קריפטو חינם", "perlombongan kripto percuma", "ilmainen kryptolouhinta",
+            "gratis krypto mining", "gratis kryptoutvinning", "இலவச கிரிப்டോ மைனிங்",
+            "ఉచిత క్రిప్టో మైనింగ్", "मोफत क्रिप्टो मायनिंग", "ਮੁਫ਼ਤ ਕ੍ਰਿਪਟੋ ਮਾਈਨਿੰਗ",
+            "મફત ક્રિપ્ટો માઇનિંગ", "സൗജന്യ ക്രിപ്റ്റോ മൈനിംഗ്", "hakar crypto kyauta",
+            "free crypto mining Nigeria", "ফ্রি ক্রিপ্টো মাইনিং", "مفت کرپٹو مائننگ", "mining criptovalute gratuito"
+          ],
+          "inLanguage": [
+            "en", "hi", "es", "ar", "fr", "de", "ru", "ja", "pt", "zh",
+            "tr", "ng", "bn", "ur", "it", "ko", "vi", "id", "th", "pl",
+            "nl", "uk", "ro", "el", "cs", "sv", "hu", "tl", "fa", "sw",
+            "he", "ms", "fi", "da", "no", "ta", "te", "mr", "pa", "gu",
+            "ml", "ha"
+          ]
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://hashforgelab.co.uk/#organization",
+          "name": "Hashforge Lab",
+          "url": "https://hashforgelab.co.uk",
+          "logo": "https://hashforgelab.co.uk/favicon.svg",
+          "sameAs": [
+            "https://twitter.com/hashforgelab"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://hashforgelab.co.uk/#website",
+          "url": "https://hashforgelab.co.uk",
+          "name": "Hashforge Lab",
+          "publisher": {
+            "@id": "https://hashforgelab.co.uk/#organization"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://hashforgelab.co.uk/?lang={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://hashforgelab.co.uk/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Is Hashforge Lab Free Mining 100% safe for my phone & computer?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, absolutely. Hashforge Lab is an educational browser simulation. Unlike real proof-of-work crypto miners that push graphics cards and CPUs to 100% and generate high heat and electricity bills, Hashforge Lab uses lightweight JavaScript algorithms. It consumes virtually 0% excess energy and never damages your hardware."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Do I need to connect a crypto wallet or make an investment?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No! No cryptocurrency wallet, private key, KYC verification, registration, or credit card investment is ever required. You can start mining immediately in your browser for free."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What is the minimum withdrawal amount, and how can I withdraw my earnings?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The minimum withdrawal amount is $10. Once your eligible balance reaches $10 or more, you will be prompted to provide your PayPal account details or Google Pay payment information, such as an eligible UPI ID or QR code where supported. After your payment details are verified, your withdrawal request will be processed according to the applicable payment terms."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Which cryptocurrencies can I simulate mining?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You can simulate mining Bitcoin (BTC SHA-256), Ethereum (ETH Ethash), Solana (SOL), Dogecoin (DOGE Scrypt), Kaspa (KAS kHeavyHash), Toncoin (TON), Monero (XMR RandomX), and Litecoin (LTC)."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Why does Hashforge Lab support 42 languages?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Decentralized blockchain technology is global. Hashforge Lab provides native localized interfaces in 42 languages across Europe, Asia, Latin America, the Middle East, and Africa to make crypto mining education freely accessible to everyone worldwide."
+              }
+            }
+          ]
+        },
+        {
+          "@type": "HowTo",
+          "@id": "https://hashforgelab.co.uk/#howto",
+          "name": "How to Simulate Free Crypto Mining in Your Browser",
+          "description": "Step-by-step guide to starting a free educational crypto mining node with zero hardware wear.",
+          "step": [
+            {
+              "@type": "HowToStep",
+              "position": 1,
+              "name": "Visit Hashforge Lab",
+              "text": "Open https://hashforgelab.co.uk in any modern web browser on desktop or mobile."
+            },
+            {
+              "@type": "HowToStep",
+              "position": 2,
+              "name": "Select Your Preferred Language",
+              "text": "Choose from 42 supported worldwide languages via the language bar or dropdown."
+            },
+            {
+              "@type": "HowToStep",
+              "position": 3,
+              "name": "Click Start Free Mining",
+              "text": "Press the Start Free Mining Now button to initiate the browser simulation engine."
+            },
+            {
+              "@type": "HowToStep",
+              "position": 4,
+              "name": "Choose a Virtual Rig and Booster",
+              "text": "Select between Browser WebNode, GPU Rig, ASIC Antminer, or Quantum Node and activate Turbo Fan or Overclock boosters."
+            },
+            {
+              "@type": "HowToStep",
+              "position": 5,
+              "name": "Monitor Real-Time Mining Rewards",
+              "text": "Watch simulated BTC, ETH, SOL, and 8+ coins accumulate in real-time alongside difficulty calculations."
+            }
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://hashforgelab.co.uk/#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://hashforgelab.co.uk/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Free Mining Simulator",
+              "item": "https://hashforgelab.co.uk/#simulator"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Virtual Hardware Health",
+              "item": "https://hashforgelab.co.uk/#hardware-health"
+            },
+            {
+              "@type": "ListItem",
+              "position": 4,
+              "name": "FAQ & Withdrawals",
+              "item": "https://hashforgelab.co.uk/#faq"
+            }
+          ]
+        },
+        {
+          "@type": "ItemList",
+          "@id": "https://hashforgelab.co.uk/#coins",
+          "name": "Supported Simulated Cryptocurrencies & Algorithms",
+          "description": "Cryptocurrencies supported in the Hashforge Lab zero-load educational browser simulator.",
+          "numberOfItems": 8,
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Bitcoin (BTC)",
+              "description": "SHA-256 Proof of Work simulation with dynamic difficulty adjustment"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Ethereum (ETH)",
+              "description": "Ethash algorithm simulation with gas estimation"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Solana (SOL)",
+              "description": "Proof of History high-throughput simulation"
+            },
+            {
+              "@type": "ListItem",
+              "position": 4,
+              "name": "Dogecoin (DOGE)",
+              "description": "Scrypt algorithm auxiliary proof-of-work simulation"
+            },
+            {
+              "@type": "ListItem",
+              "position": 5,
+              "name": "Kaspa (KAS)",
+              "description": "kHeavyHash GHOSTDAG consensus simulation"
+            },
+            {
+              "@type": "ListItem",
+              "position": 6,
+              "name": "Toncoin (TON)",
+              "description": "The Open Network proof-of-stake smart contract reward simulation"
+            },
+            {
+              "@type": "ListItem",
+              "position": 7,
+              "name": "Monero (XMR)",
+              "description": "RandomX ASIC-resistant CPU mining simulation"
+            },
+            {
+              "@type": "ListItem",
+              "position": 8,
+              "name": "Litecoin (LTC)",
+              "description": "Scrypt peer-to-peer fast block mining simulation"
+            }
+          ]
+        }
+      ]
     }
     </script>
 
@@ -79,4 +420,3 @@
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

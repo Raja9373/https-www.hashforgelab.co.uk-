@@ -13,9 +13,13 @@ import {
   Sparkles,
   Award,
   Sliders,
-  DollarSign
+  DollarSign,
+  ShieldCheck,
+  Wind
 } from 'lucide-react';
 import { Coin, COINS, MINING_RIGS, MiningRig } from '../data/coins';
+import { VirtualHardwareHealth } from './VirtualHardwareHealth';
+import { MarketSentiment } from './MarketSentiment';
 
 interface MiningConsoleProps {
   onOpenShareModal: () => void;
@@ -27,8 +31,11 @@ export const MiningConsole: React.FC<MiningConsoleProps> = ({
   soundEnabled
 }) => {
   const [selectedRig, setSelectedRig] = useState<MiningRig>(MINING_RIGS[0]);
+  const [selectedCoin, setSelectedCoin] = useState<Coin>(COINS[0]);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [activeBooster, setActiveBooster] = useState<string | null>(null);
+  const [consoleTab, setConsoleTab] = useState<'console' | 'hardware_health'>('console');
+  const [isOverclocked, setIsOverclocked] = useState<boolean>(false);
 
   // Mining Metrics State
   const [hashRate, setHashRate] = useState<number>(640);
@@ -79,6 +86,26 @@ export const MiningConsole: React.FC<MiningConsoleProps> = ({
     }
   };
 
+  // Toggle simulated overclock (+20% hashrate boost & high power UI)
+  const toggleOverclock = () => {
+    setIsOverclocked((prev) => {
+      const next = !prev;
+      if (next) {
+        setLogs((l) => [
+          '> ⚡ [SIMULATED OVERCLOCK ENABLED] Clocks boosted +20%! High Power Mode active (Safe 0W Virtual Load).',
+          ...l.slice(0, 15)
+        ]);
+        playBeep();
+      } else {
+        setLogs((l) => [
+          '> ⚡ [SIMULATED OVERCLOCK DISABLED] Core clocks reverted to standard baseline (Balanced Mode).',
+          ...l.slice(0, 15)
+        ]);
+      }
+      return next;
+    });
+  };
+
   // Main mining loop
   useEffect(() => {
     if (isPaused) return;
@@ -90,13 +117,16 @@ export const MiningConsole: React.FC<MiningConsoleProps> = ({
       if (activeBooster === 'overclock') boostMult = 1.75;
       if (activeBooster === 'quantum') boostMult = 2.5;
 
-      const baseHash = (Math.random() * 400 + 450) * selectedRig.multiplier * boostMult;
+      // Simulated Overclock multiplier: +20% boost
+      const overclockMult = isOverclocked ? 1.20 : 1.0;
+
+      const baseHash = (Math.random() * 400 + 450) * selectedRig.multiplier * boostMult * overclockMult;
       setHashRate(baseHash);
       setProgressBar((prev) => (prev + 4.5) % 100);
 
-      // Fluctuate hardware stats
-      setTemp(45 + Math.floor(Math.random() * 12) + (activeBooster ? 6 : 0));
-      setFanSpeed(50 + Math.floor(Math.random() * 20) + (activeBooster ? 15 : 0));
+      // Fluctuate hardware stats with overclock boost
+      setTemp(45 + Math.floor(Math.random() * 12) + (activeBooster ? 6 : 0) + (isOverclocked ? 8 : 0));
+      setFanSpeed(50 + Math.floor(Math.random() * 20) + (activeBooster ? 15 : 0) + (isOverclocked ? 16 : 0));
 
       // Increment balances
       setBalances((prev) => {
@@ -121,7 +151,7 @@ export const MiningConsole: React.FC<MiningConsoleProps> = ({
     }, 160);
 
     return () => clearInterval(interval);
-  }, [isPaused, selectedRig, activeBooster, soundEnabled]);
+  }, [isPaused, selectedRig, activeBooster, isOverclocked, soundEnabled]);
 
   // Block & Difficulty tick
   useEffect(() => {
@@ -151,26 +181,55 @@ export const MiningConsole: React.FC<MiningConsoleProps> = ({
   };
 
   return (
-    <div className="pt-24 pb-16 px-4 sm:px-6 max-w-7xl mx-auto">
+    <div className="pt-4 sm:pt-6 pb-16 px-4 sm:px-6 max-w-7xl mx-auto">
       
       {/* Header Controls */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 bg-white/[0.04] p-4 rounded-2xl border border-white/10">
+      <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 p-4 rounded-2xl border transition-all duration-500 ${
+        isOverclocked
+          ? 'bg-gradient-to-r from-orange-950/40 via-[#120804] to-black/60 border-orange-500/40 shadow-[0_0_30px_rgba(255,107,0,0.15)]'
+          : 'bg-white/[0.04] border-white/10'
+      }`}>
         <div>
           <div className="flex items-center gap-2">
             <h2 className="font-orbitron font-extrabold text-xl sm:text-2xl text-white">
               ⛏️ Worldwide Mining Console
             </h2>
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#00ff88]/15 text-[#00ff88] border border-[#00ff88]/30">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00ff88] animate-ping" />
-              LIVE
+            <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold border transition-colors ${
+              isOverclocked
+                ? 'bg-orange-500/20 text-orange-300 border-orange-500/40'
+                : 'bg-[#00ff88]/15 text-[#00ff88] border-[#00ff88]/30'
+            }`}>
+              <span className={`w-1.5 h-1.5 rounded-full animate-ping ${isOverclocked ? 'bg-orange-400' : 'bg-[#00ff88]'}`} />
+              {isOverclocked ? 'HIGH POWER' : 'LIVE'}
             </span>
           </div>
           <p className="text-xs text-gray-400 mt-1">
-            Connected to <span className="text-[#00ff88]">hashforgelab.co.uk</span> Global Pool • 180+ Country Sync
+            Connected to <span className={isOverclocked ? 'text-orange-400 font-semibold' : 'text-[#00ff88]'}>hashforgelab.co.uk</span> Global Pool • 180+ Country Sync
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5 w-full sm:w-auto">
+        <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+          {/* Simulated Overclock Toggle Button */}
+          <button
+            id="toggle-simulated-overclock"
+            onClick={toggleOverclock}
+            className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl font-orbitron font-bold text-xs border transition-all cursor-pointer ${
+              isOverclocked 
+                ? 'bg-gradient-to-r from-orange-600 via-amber-600 to-rose-600 text-black border-orange-400 shadow-[0_0_20px_rgba(255,107,0,0.6)] font-extrabold hover:brightness-110' 
+                : 'bg-white/[0.05] text-gray-300 border-white/10 hover:border-orange-500/40 hover:text-white'
+            }`}
+            aria-pressed={isOverclocked}
+            title="Toggle Simulated Overclock (+20% Hashrate and High Power Mode)"
+          >
+            <Zap className={`w-3.5 h-3.5 ${isOverclocked ? 'fill-black text-black animate-pulse' : 'text-orange-400'}`} />
+            <span>{isOverclocked ? 'OVERCLOCK ACTIVE (+20%)' : 'SIMULATE OVERCLOCK'}</span>
+            <span className={`text-[9px] px-1.5 py-0.5 rounded font-mono ${
+              isOverclocked ? 'bg-black/30 text-black font-black' : 'bg-orange-500/15 text-orange-400 border border-orange-500/30'
+            }`}>
+              {isOverclocked ? 'HIGH POWER' : '+20%'}
+            </span>
+          </button>
+
           <button
             id="toggle-pause-mining"
             onClick={() => setIsPaused(!isPaused)}
@@ -190,287 +249,402 @@ export const MiningConsole: React.FC<MiningConsoleProps> = ({
             className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#00ff88] to-[#00d4ff] text-black font-orbitron font-extrabold text-xs shadow-[0_0_20px_rgba(0,255,136,0.3)] hover:shadow-[0_0_30px_rgba(0,255,136,0.6)] transition-all"
           >
             <Share2 className="w-3.5 h-3.5" />
-            SHARE & EARN $$$
+            SHARE &amp; EARN $$$
           </button>
         </div>
       </div>
 
-      {/* Main Grid: Left Console + Right Wallet */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
-        
-        {/* Left Column: Rig Selector, Speedometer & Terminal */}
-        <div className="lg:col-span-7 space-y-6">
-          
-          {/* Main Rig Display Card */}
-          <div className="bg-white/[0.05] border border-white/12 rounded-3xl p-6 backdrop-blur-xl relative overflow-hidden">
-            <div className="absolute -top-16 -right-16 w-48 h-48 bg-[#00ff88]/10 rounded-full blur-3xl pointer-events-none" />
+      {/* Sub-navigation Tabs: Console vs Virtual Hardware Health */}
+      <div className="flex items-center gap-2 mb-6 border-b border-white/10 pb-3">
+        <button
+          onClick={() => setConsoleTab('console')}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-orbitron font-bold transition-all cursor-pointer ${
+            consoleTab === 'console'
+              ? 'bg-[#00ff88] text-black shadow-[0_0_15px_rgba(0,255,136,0.4)]'
+              : 'text-gray-400 hover:text-white bg-white/[0.04]'
+          }`}
+        >
+          <Activity className="w-4 h-4" />
+          <span>MINING CONSOLE &amp; YIELDS</span>
+        </button>
 
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-mono text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
-                <Activity className="w-4 h-4 text-[#00ff88]" /> GLOBAL SIMULATED HASHRATE
-              </span>
-              <span className="px-3 py-1 rounded-full text-[11px] font-orbitron font-bold bg-[#00ff88]/10 text-[#00ff88] border border-[#00ff88]/30">
-                {selectedRig.tag}
-              </span>
-            </div>
+        <button
+          onClick={() => setConsoleTab('hardware_health')}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-orbitron font-bold transition-all cursor-pointer ${
+            consoleTab === 'hardware_health'
+              ? 'bg-[#00d4ff] text-black shadow-[0_0_15px_rgba(0,212,255,0.4)]'
+              : 'text-gray-400 hover:text-white bg-white/[0.04]'
+          }`}
+        >
+          <ShieldCheck className="w-4 h-4 text-[#00ff88]" />
+          <span>VIRTUAL HARDWARE HEALTH (0% LOAD)</span>
+        </button>
+      </div>
 
-            {/* Massive Hashrate Readout */}
-            <div className="my-3">
-              <div className="font-orbitron font-black text-4xl sm:text-5xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-[#00ff88] via-[#00d4ff] to-[#8a2be2] tracking-tight">
-                {formatHash(hashRate)}
-              </div>
-              <p className="text-xs text-gray-400 font-mono mt-1">
-                Active Rig: <span className="text-white font-semibold">{selectedRig.name}</span> • Est. Efficiency: <span className="text-[#00ff88]">{selectedRig.efficiency}</span>
-              </p>
-            </div>
+      {/* TAB 1: Main Console & Yields */}
+      {consoleTab === 'console' ? (
+        <div className="space-y-8 animate-in fade-in duration-200">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            {/* Left Column: Rig Selector, Speedometer & Terminal */}
+            <div className="lg:col-span-7 space-y-6">
+              
+              {/* Main Rig Display Card with High Power Color Shift */}
+              <div className={`border rounded-3xl p-6 backdrop-blur-xl relative overflow-hidden transition-all duration-500 ${
+                isOverclocked
+                  ? 'bg-gradient-to-br from-[#1c0d04]/95 via-[#100602]/95 to-black/95 border-orange-500/50 shadow-[0_0_45px_rgba(255,107,0,0.25)] ring-1 ring-orange-500/30'
+                  : 'bg-white/[0.05] border-white/12 shadow-none'
+              }`}>
+                {/* Ambient Aura */}
+                <div className={`absolute -top-16 -right-16 w-56 h-56 rounded-full blur-3xl pointer-events-none transition-colors duration-500 ${
+                  isOverclocked ? 'bg-orange-500/25' : 'bg-[#00ff88]/10'
+                }`} />
 
-            {/* Glowing Mining Progress Bar */}
-            <div className="my-5">
-              <div className="flex justify-between text-xs font-mono text-gray-400 mb-1.5">
-                <span>Proof-of-Work Block Hash Calculation</span>
-                <span className="text-[#00ff88] font-bold">{progressBar.toFixed(0)}%</span>
-              </div>
-              <div className="w-full h-3.5 bg-black/60 rounded-full overflow-hidden p-0.5 border border-white/10 shadow-inner">
-                <div 
-                  className="h-full rounded-full bg-gradient-to-r from-[#00ff88] via-[#00d4ff] to-[#8a2be2] shadow-[0_0_15px_rgba(0,255,136,0.8)] transition-all duration-150"
-                  style={{ width: `${progressBar}%` }}
-                />
-              </div>
-            </div>
+                {/* High Power Top Energy Glow line */}
+                {isOverclocked && (
+                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-orange-500 to-transparent animate-pulse" />
+                )}
 
-            {/* Block & Difficulty Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-white/10">
-              <div className="bg-black/30 p-2.5 rounded-xl border border-white/5">
-                <span className="text-[10px] text-gray-400 block">Current Block</span>
-                <b className="font-orbitron text-sm text-white">#{blockHeight.toLocaleString()}</b>
-              </div>
-              <div className="bg-black/30 p-2.5 rounded-xl border border-white/5">
-                <span className="text-[10px] text-gray-400 block">Difficulty</span>
-                <b className="font-orbitron text-sm text-[#00d4ff]">{difficulty}T</b>
-              </div>
-              <div className="bg-black/30 p-2.5 rounded-xl border border-white/5">
-                <span className="text-[10px] text-gray-400 block">Shares Accepted</span>
-                <b className="font-orbitron text-sm text-[#00ff88]">{sharesAccepted} ✅</b>
-              </div>
-              <div className="bg-black/30 p-2.5 rounded-xl border border-white/5">
-                <span className="text-[10px] text-gray-400 block">Eco Electricity</span>
-                <b className="font-orbitron text-sm text-purple-300">0 Watts (Free)</b>
-              </div>
-            </div>
-          </div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className={`text-xs font-mono uppercase tracking-wider flex items-center gap-1.5 transition-colors ${
+                    isOverclocked ? 'text-orange-300' : 'text-gray-400'
+                  }`}>
+                    <Activity className={`w-4 h-4 ${isOverclocked ? 'text-orange-400 animate-pulse' : 'text-[#00ff88]'}`} />
+                    GLOBAL SIMULATED HASHRATE
+                  </span>
 
-          {/* Rig Selectors */}
-          <div className="bg-white/[0.04] border border-white/10 rounded-3xl p-5">
-            <h3 className="font-orbitron text-sm font-bold text-gray-200 mb-3 flex items-center gap-2">
-              <Cpu className="w-4 h-4 text-[#00ff88]" /> Select Virtual Mining Hardware:
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {MINING_RIGS.map((rig) => (
-                <button
-                  key={rig.id}
-                  onClick={() => setSelectedRig(rig)}
-                  className={`p-3.5 rounded-2xl border text-left transition-all duration-200 cursor-pointer ${
-                    selectedRig.id === rig.id
-                      ? 'bg-[#00ff88]/10 border-[#00ff88] shadow-[0_0_20px_rgba(0,255,136,0.25)]'
-                      : 'bg-black/30 border-white/10 hover:border-white/20 hover:bg-white/[0.02]'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="font-bold text-xs text-white">{rig.name}</span>
-                    <span className={`text-[10px] font-orbitron font-bold px-2 py-0.5 rounded-md ${
-                      selectedRig.id === rig.id ? 'bg-[#00ff88] text-black' : 'bg-white/10 text-gray-400'
+                  <div className="flex items-center gap-2">
+                    {isOverclocked && (
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-orbitron font-bold bg-orange-500/20 text-orange-300 border border-orange-500/50 flex items-center gap-1 animate-pulse">
+                        <Zap className="w-3 h-3 fill-orange-400 text-orange-400" />
+                        HIGH POWER (+20%)
+                      </span>
+                    )}
+                    <span className={`px-3 py-1 rounded-full text-[11px] font-orbitron font-bold border transition-colors ${
+                      isOverclocked 
+                        ? 'bg-amber-500/10 text-amber-300 border-amber-500/40' 
+                        : 'bg-[#00ff88]/10 text-[#00ff88] border-[#00ff88]/30'
                     }`}>
-                      {rig.tag}
+                      {selectedRig.tag}
                     </span>
                   </div>
-                  <p className="text-[11px] text-gray-400 mb-1">{rig.description}</p>
-                  <div className="text-[10px] font-mono text-[#00d4ff]">
-                    Est. Speed: {rig.hashRange}
+                </div>
+
+                {/* Massive Hashrate Readout */}
+                <div className="my-3">
+                  <div className={`font-orbitron font-black text-4xl sm:text-5xl md:text-6xl tracking-tight transition-all duration-300 text-transparent bg-clip-text ${
+                    isOverclocked
+                      ? 'bg-gradient-to-r from-amber-300 via-orange-400 to-rose-500 drop-shadow-[0_0_20px_rgba(255,107,0,0.4)]'
+                      : 'bg-gradient-to-r from-[#00ff88] via-[#00d4ff] to-[#8a2be2]'
+                  }`}>
+                    {formatHash(hashRate)}
                   </div>
-                </button>
-              ))}
-            </div>
-          </div>
+                  <p className="text-xs text-gray-400 font-mono mt-1">
+                    Active Rig: <span className="text-white font-semibold">{selectedRig.name}</span> • Est. Efficiency: <span className={isOverclocked ? 'text-orange-400 font-bold' : 'text-[#00ff88]'}>{selectedRig.efficiency}</span>
+                    {isOverclocked && (
+                      <span className="text-amber-300 font-bold ml-2">(+20% Overclock Boost Applied)</span>
+                    )}
+                  </p>
+                </div>
 
-          {/* Boosters Row */}
-          <div className="bg-white/[0.04] border border-white/10 rounded-3xl p-5">
-            <h3 className="font-orbitron text-sm font-bold text-gray-200 mb-3 flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-[#00d4ff]" /> Virtual Rig Boosters (Free):
-            </h3>
-            <div className="grid grid-cols-3 gap-2.5">
-              <button
-                onClick={() => setActiveBooster(activeBooster === 'turbo' ? null : 'turbo')}
-                className={`p-2.5 rounded-xl border text-center transition-all ${
-                  activeBooster === 'turbo'
-                    ? 'bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] font-bold shadow-[0_0_15px_rgba(0,255,136,0.3)]'
-                    : 'bg-black/30 border-white/10 text-gray-300 hover:border-[#00ff88]/40'
-                }`}
-              >
-                <Flame className="w-4 h-4 mx-auto mb-1 text-[#00ff88]" />
-                <span className="text-[11px] block font-bold">Turbo Fan</span>
-                <span className="text-[9px] text-gray-400">+35% Hash</span>
-              </button>
+                {/* Glowing Mining Progress Bar */}
+                <div className="my-5">
+                  <div className="flex justify-between text-xs font-mono text-gray-400 mb-1.5">
+                    <span>Proof-of-Work Block Hash Calculation {isOverclocked && <span className="text-orange-400 font-bold">[High Power]</span>}</span>
+                    <span className={`font-bold ${isOverclocked ? 'text-orange-400' : 'text-[#00ff88]'}`}>{progressBar.toFixed(0)}%</span>
+                  </div>
+                  <div className="w-full h-3.5 bg-black/60 rounded-full overflow-hidden p-0.5 border border-white/10 shadow-inner">
+                    <div 
+                      className={`h-full rounded-full transition-all duration-150 ${
+                        isOverclocked
+                          ? 'bg-gradient-to-r from-amber-400 via-orange-500 to-red-600 shadow-[0_0_20px_rgba(255,107,0,0.85)]'
+                          : 'bg-gradient-to-r from-[#00ff88] via-[#00d4ff] to-[#8a2be2] shadow-[0_0_15px_rgba(0,255,136,0.8)]'
+                      }`}
+                      style={{ width: `${progressBar}%` }}
+                    />
+                  </div>
+                </div>
 
-              <button
-                onClick={() => setActiveBooster(activeBooster === 'overclock' ? null : 'overclock')}
-                className={`p-2.5 rounded-xl border text-center transition-all ${
-                  activeBooster === 'overclock'
-                    ? 'bg-[#00d4ff]/20 border-[#00d4ff] text-[#00d4ff] font-bold shadow-[0_0_15px_rgba(0,212,255,0.3)]'
-                    : 'bg-black/30 border-white/10 text-gray-300 hover:border-[#00d4ff]/40'
-                }`}
-              >
-                <Sliders className="w-4 h-4 mx-auto mb-1 text-[#00d4ff]" />
-                <span className="text-[11px] block font-bold">Overclock</span>
-                <span className="text-[9px] text-gray-400">+75% Hash</span>
-              </button>
-
-              <button
-                onClick={() => setActiveBooster(activeBooster === 'quantum' ? null : 'quantum')}
-                className={`p-2.5 rounded-xl border text-center transition-all ${
-                  activeBooster === 'quantum'
-                    ? 'bg-purple-500/20 border-purple-500 text-purple-300 font-bold shadow-[0_0_15px_rgba(138,43,226,0.3)]'
-                    : 'bg-black/30 border-white/10 text-gray-300 hover:border-purple-400/40'
-                }`}
-              >
-                <Zap className="w-4 h-4 mx-auto mb-1 text-purple-400" />
-                <span className="text-[11px] block font-bold">Quantum AI</span>
-                <span className="text-[9px] text-gray-400">+150% Hash</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Terminal Console Logs */}
-          <div className="bg-black/80 border border-white/15 rounded-3xl p-4 font-mono-code text-xs">
-            <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10 text-gray-400">
-              <div className="flex items-center gap-2">
-                <Terminal className="w-3.5 h-3.5 text-[#00ff88]" />
-                <span className="font-bold text-gray-200">WORLDWIDE MINER LOGS</span>
+                {/* Block & Difficulty Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-white/10">
+                  <div className="bg-black/30 p-2.5 rounded-xl border border-white/5">
+                    <span className="text-[10px] text-gray-400 block">Current Block</span>
+                    <b className="font-orbitron text-sm text-white">#{blockHeight.toLocaleString()}</b>
+                  </div>
+                  <div className="bg-black/30 p-2.5 rounded-xl border border-white/5">
+                    <span className="text-[10px] text-gray-400 block">Difficulty</span>
+                    <b className="font-orbitron text-sm text-[#00d4ff]">{difficulty}T</b>
+                  </div>
+                  <div className="bg-black/30 p-2.5 rounded-xl border border-white/5">
+                    <span className="text-[10px] text-gray-400 block">Shares Accepted</span>
+                    <b className="font-orbitron text-sm text-[#00ff88]">{sharesAccepted} ✅</b>
+                  </div>
+                  <div className="bg-black/30 p-2.5 rounded-xl border border-white/5">
+                    <span className="text-[10px] text-gray-400 block">Eco Electricity</span>
+                    <b className="font-orbitron text-sm text-purple-300">0 Watts (Free)</b>
+                  </div>
+                </div>
               </div>
-              <span className="text-[10px] text-gray-500">Auto-scrolling stream</span>
-            </div>
-            
-            <div className="space-y-1.5 max-h-48 overflow-y-auto pr-2 text-[11px]">
-              {logs.map((log, index) => {
-                const isSuccess = log.includes('✅') || log.includes('reward') || log.includes('finalized');
-                return (
-                  <div 
-                    key={index}
-                    className={`leading-relaxed transition-all ${
-                      index === 0 ? 'text-[#00ff88] font-semibold' : isSuccess ? 'text-gray-300' : 'text-gray-400'
-                    }`}
-                  >
-                    {log}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
 
-        </div>
-
-        {/* Right Column: Multi-Coin Live Balances & Earnings */}
-        <div className="lg:col-span-5 space-y-6">
-          
-          {/* Total Value Banner Card */}
-          <div className="bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-[#00ff88]/40 rounded-3xl p-6 backdrop-blur-xl shadow-[0_0_30px_rgba(0,255,136,0.15)] relative overflow-hidden">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-mono text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
-                <DollarSign className="w-4 h-4 text-[#00ff88]" /> TOTAL SIMULATED BALANCE
-              </span>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#00ff88]/20 text-[#00ff88]">
-                REAL-TIME LIVE
-              </span>
-            </div>
-
-            <div className="font-orbitron font-extrabold text-3xl sm:text-4xl text-[#00ff88] drop-shadow-[0_0_12px_rgba(0,255,136,0.5)] my-2">
-              ${totalUsdValue.toFixed(4)} USD
-            </div>
-
-            <p className="text-xs text-gray-300 leading-relaxed mb-4">
-              All 12+ simulated coins are actively mined and converted at live simulated spot market rates.
-            </p>
-
-            <button
-              onClick={onOpenShareModal}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#00ff88] via-[#00d4ff] to-[#00ff88] text-black font-orbitron font-black text-xs tracking-wider shadow-[0_0_20px_rgba(0,255,136,0.4)] hover:shadow-[0_0_35px_rgba(0,255,136,0.7)] hover:scale-[1.02] transition-all cursor-pointer"
-            >
-              🚀 SHARE & EARN REAL $$$ (MONETIZED)
-            </button>
-          </div>
-
-          {/* Individual Coins List */}
-          <div className="bg-white/[0.05] border border-white/12 rounded-3xl p-5 backdrop-blur-xl">
-            <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
-              <h3 className="font-orbitron text-sm font-bold text-white flex items-center gap-2">
-                <Layers className="w-4 h-4 text-[#00d4ff]" /> Free Mining Crypto Yields
-              </h3>
-              <span className="text-[11px] text-gray-400 font-mono">8 Active Coins</span>
-            </div>
-
-            <div className="space-y-2.5 max-h-[460px] overflow-y-auto pr-1">
-              {COINS.map((coin) => {
-                const amount = balances[coin.id] || 0;
-                const usdVal = amount * coin.usdPrice;
-
-                return (
-                  <div
-                    key={coin.id}
-                    className="flex items-center justify-between p-3 rounded-2xl bg-black/40 border border-white/5 hover:border-white/20 transition-all"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div 
-                        className="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-base shadow-sm"
-                        style={{ backgroundColor: `${coin.color}25`, color: coin.color, border: `1px solid ${coin.color}50` }}
-                      >
-                        {coin.icon}
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="font-bold text-xs text-white">{coin.name}</span>
-                          <span className="text-[10px] text-gray-400 font-mono uppercase">({coin.symbol})</span>
-                        </div>
-                        <span className="text-[10px] text-gray-500 font-mono block">
-                          {coin.algorithm}
+              {/* Rig Selectors */}
+              <div className="bg-white/[0.04] border border-white/10 rounded-3xl p-5">
+                <h3 className="font-orbitron text-sm font-bold text-gray-200 mb-3 flex items-center gap-2">
+                  <Cpu className="w-4 h-4 text-[#00ff88]" /> Select Virtual Mining Hardware:
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {MINING_RIGS.map((rig) => (
+                    <button
+                      key={rig.id}
+                      onClick={() => setSelectedRig(rig)}
+                      className={`p-3.5 rounded-2xl border text-left transition-all duration-200 cursor-pointer ${
+                        selectedRig.id === rig.id
+                          ? 'bg-[#00ff88]/10 border-[#00ff88] shadow-[0_0_20px_rgba(0,255,136,0.25)]'
+                          : 'bg-black/30 border-white/10 hover:border-white/20 hover:bg-white/[0.02]'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-bold text-xs text-white">{rig.name}</span>
+                        <span className={`text-[10px] font-orbitron font-bold px-2 py-0.5 rounded-md ${
+                          selectedRig.id === rig.id ? 'bg-[#00ff88] text-black' : 'bg-white/10 text-gray-400'
+                        }`}>
+                          {rig.tag}
                         </span>
                       </div>
-                    </div>
+                      <p className="text-[11px] text-gray-400 mb-1">{rig.description}</p>
+                      <div className="text-[10px] font-mono text-[#00d4ff]">
+                        Est. Speed: {rig.hashRange}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-                    <div className="text-right">
-                      <div className="font-mono font-bold text-xs text-white">
-                        {amount.toFixed(coin.decimals)} <span className="text-gray-400 text-[10px]">{coin.symbol}</span>
-                      </div>
-                      <div className="text-[11px] font-mono text-[#00ff88]">
-                        ≈ ${usdVal.toFixed(4)}
-                      </div>
-                    </div>
+              {/* Boosters Row */}
+              <div className="bg-white/[0.04] border border-white/10 rounded-3xl p-5">
+                <h3 className="font-orbitron text-sm font-bold text-gray-200 mb-3 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-[#00d4ff]" /> Virtual Rig Boosters (Free):
+                </h3>
+                <div className="grid grid-cols-3 gap-2.5">
+                  <button
+                    onClick={() => setActiveBooster(activeBooster === 'turbo' ? null : 'turbo')}
+                    className={`p-2.5 rounded-xl border text-center transition-all ${
+                      activeBooster === 'turbo'
+                        ? 'bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] font-bold shadow-[0_0_15px_rgba(0,255,136,0.3)]'
+                        : 'bg-black/30 border-white/10 text-gray-300 hover:border-[#00ff88]/40'
+                    }`}
+                  >
+                    <Flame className="w-4 h-4 mx-auto mb-1 text-[#00ff88]" />
+                    <span className="text-[11px] block font-bold">Turbo Fan</span>
+                    <span className="text-[9px] text-gray-400">+35% Hash</span>
+                  </button>
+
+                  <button
+                    onClick={() => setActiveBooster(activeBooster === 'overclock' ? null : 'overclock')}
+                    className={`p-2.5 rounded-xl border text-center transition-all ${
+                      activeBooster === 'overclock'
+                        ? 'bg-[#00d4ff]/20 border-[#00d4ff] text-[#00d4ff] font-bold shadow-[0_0_15px_rgba(0,212,255,0.3)]'
+                        : 'bg-black/30 border-white/10 text-gray-300 hover:border-[#00d4ff]/40'
+                    }`}
+                  >
+                    <Sliders className="w-4 h-4 mx-auto mb-1 text-[#00d4ff]" />
+                    <span className="text-[11px] block font-bold">Overclock</span>
+                    <span className="text-[9px] text-gray-400">+75% Hash</span>
+                  </button>
+
+                  <button
+                    onClick={() => setActiveBooster(activeBooster === 'quantum' ? null : 'quantum')}
+                    className={`p-2.5 rounded-xl border text-center transition-all ${
+                      activeBooster === 'quantum'
+                        ? 'bg-purple-500/20 border-purple-500 text-purple-300 font-bold shadow-[0_0_15px_rgba(138,43,226,0.3)]'
+                        : 'bg-black/30 border-white/10 text-gray-300 hover:border-purple-400/40'
+                    }`}
+                  >
+                    <Zap className="w-4 h-4 mx-auto mb-1 text-purple-400" />
+                    <span className="text-[11px] block font-bold">Quantum AI</span>
+                    <span className="text-[9px] text-gray-400">+150% Hash</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Terminal Console Logs */}
+              <div className="bg-black/80 border border-white/15 rounded-3xl p-4 font-mono-code text-xs">
+                <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10 text-gray-400">
+                  <div className="flex items-center gap-2">
+                    <Terminal className="w-3.5 h-3.5 text-[#00ff88]" />
+                    <span className="font-bold text-gray-200">WORLDWIDE MINER LOGS</span>
                   </div>
-                );
-              })}
+                  <span className="text-[10px] text-gray-500">Auto-scrolling stream</span>
+                </div>
+                
+                <div className="space-y-1.5 max-h-48 overflow-y-auto pr-2 text-[11px]">
+                  {logs.map((log, index) => {
+                    const isSuccess = log.includes('✅') || log.includes('reward') || log.includes('finalized');
+                    return (
+                      <div 
+                        key={index}
+                        className={`leading-relaxed transition-all ${
+                          index === 0 ? 'text-[#00ff88] font-semibold' : isSuccess ? 'text-gray-300' : 'text-gray-400'
+                        }`}
+                      >
+                        {log}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
             </div>
+
+            {/* Right Column: Multi-Coin Live Balances & Earnings */}
+            <div className="lg:col-span-5 space-y-6">
+              
+              {/* Total Value Banner Card */}
+              <div className="bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-[#00ff88]/40 rounded-3xl p-6 backdrop-blur-xl shadow-[0_0_30px_rgba(0,255,136,0.15)] relative overflow-hidden">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-mono text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
+                    <DollarSign className="w-4 h-4 text-[#00ff88]" /> TOTAL SIMULATED BALANCE
+                  </span>
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#00ff88]/20 text-[#00ff88]">
+                    REAL-TIME LIVE
+                  </span>
+                </div>
+
+                <div className="font-orbitron font-extrabold text-3xl sm:text-4xl text-[#00ff88] drop-shadow-[0_0_12px_rgba(0,255,136,0.5)] my-2">
+                  ${totalUsdValue.toFixed(4)} USD
+                </div>
+
+                <p className="text-xs text-gray-300 leading-relaxed mb-4">
+                  All 12+ simulated coins are actively mined and converted at live simulated spot market rates.
+                </p>
+
+                <button
+                  onClick={onOpenShareModal}
+                  className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#00ff88] via-[#00d4ff] to-[#00ff88] text-black font-orbitron font-black text-xs tracking-wider shadow-[0_0_20px_rgba(0,255,136,0.4)] hover:shadow-[0_0_35px_rgba(0,255,136,0.7)] hover:scale-[1.02] transition-all cursor-pointer"
+                >
+                  🚀 SHARE &amp; EARN REAL $$$ (MONETIZED)
+                </button>
+              </div>
+
+              {/* Individual Coins List */}
+              <div className="bg-white/[0.05] border border-white/12 rounded-3xl p-5 backdrop-blur-xl">
+                <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
+                  <h3 className="font-orbitron text-sm font-bold text-white flex items-center gap-2">
+                    <Layers className="w-4 h-4 text-[#00d4ff]" /> Free Mining Crypto Yields
+                  </h3>
+                  <span className="text-[11px] text-[#00ff88] font-mono">Click to view sentiment</span>
+                </div>
+
+                <div className="space-y-2.5 max-h-[380px] overflow-y-auto pr-1">
+                  {COINS.map((coin) => {
+                    const amount = balances[coin.id] || 0;
+                    const usdVal = amount * coin.usdPrice;
+                    const isSelected = selectedCoin.id === coin.id;
+
+                    return (
+                      <div
+                        key={coin.id}
+                        onClick={() => setSelectedCoin(coin)}
+                        className={`flex items-center justify-between p-3 rounded-2xl cursor-pointer transition-all ${
+                          isSelected
+                            ? 'bg-white/10 border shadow-lg'
+                            : 'bg-black/40 border border-white/5 hover:border-white/25 hover:bg-black/60'
+                        }`}
+                        style={{
+                          borderColor: isSelected ? coin.color : undefined,
+                          boxShadow: isSelected ? `0 0 16px ${coin.color}35` : undefined
+                        }}
+                        title={`Click to inspect ${coin.name} (${coin.symbol}) market sentiment & sparkline chart`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div 
+                            className="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-base shadow-sm transition-transform hover:scale-105"
+                            style={{ backgroundColor: `${coin.color}25`, color: coin.color, border: `1px solid ${coin.color}50` }}
+                          >
+                            {coin.icon}
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-1.5">
+                              <span className="font-bold text-xs text-white">{coin.name}</span>
+                              <span className="text-[10px] text-gray-400 font-mono uppercase">({coin.symbol})</span>
+                              {isSelected && (
+                                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-[#00ff88]/20 text-[#00ff88]">
+                                  CHARTED
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-[10px] text-gray-500 font-mono block">
+                              {coin.algorithm}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="text-right">
+                          <div className="font-mono font-bold text-xs text-white">
+                            {amount.toFixed(coin.decimals)} <span className="text-gray-400 text-[10px]">{coin.symbol}</span>
+                          </div>
+                          <div className="text-[11px] font-mono text-[#00ff88]">
+                            ≈ ${usdVal.toFixed(4)}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Quick Telemetry Strip (Clickable to switch tab) */}
+              <div 
+                onClick={() => setConsoleTab('hardware_health')}
+                className="group cursor-pointer grid grid-cols-2 gap-3 bg-white/[0.04] hover:bg-white/[0.07] p-4 rounded-3xl border border-white/10 hover:border-[#00ff88]/40 transition-all text-xs"
+              >
+                <div className="flex items-center gap-2.5 p-2 rounded-xl bg-black/30">
+                  <Flame className="w-4 h-4 text-orange-400" />
+                  <div>
+                    <span className="text-[10px] text-gray-400 block">Core Temp (Sim)</span>
+                    <b className="text-white font-mono">{temp}°C (Safe)</b>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2.5 p-2 rounded-xl bg-black/30">
+                  <RefreshCw className="w-4 h-4 text-[#00d4ff] animate-spin" style={{ animationDuration: '4s' }} />
+                  <div>
+                    <span className="text-[10px] text-gray-400 block">Virtual Fan</span>
+                    <b className="text-white font-mono">{fanSpeed}% RPM</b>
+                  </div>
+                </div>
+
+                <div className="col-span-2 text-center text-[11px] text-[#00ff88] group-hover:underline flex items-center justify-center gap-1 font-mono pt-1">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>Open Virtual Hardware Health &amp; Zero-Load Proof →</span>
+                </div>
+              </div>
+
+            </div>
+
           </div>
 
-          {/* Virtual Rig Telemetry Sensors */}
-          <div className="grid grid-cols-2 gap-3 bg-white/[0.04] p-4 rounded-3xl border border-white/10 text-xs">
-            <div className="flex items-center gap-2.5 p-2 rounded-xl bg-black/30">
-              <Flame className="w-4 h-4 text-orange-400" />
-              <div>
-                <span className="text-[10px] text-gray-400 block">Core Temp</span>
-                <b className="text-white font-mono">{temp}°C (Safe)</b>
-              </div>
-            </div>
+          {/* Market Sentiment & Sparkline Chart Component */}
+          <MarketSentiment 
+            selectedCoin={selectedCoin}
+            onSelectCoin={setSelectedCoin}
+            isOverclocked={isOverclocked}
+          />
 
-            <div className="flex items-center gap-2.5 p-2 rounded-xl bg-black/30">
-              <RefreshCw className="w-4 h-4 text-[#00d4ff] animate-spin" style={{ animationDuration: '4s' }} />
-              <div>
-                <span className="text-[10px] text-gray-400 block">Virtual Fan</span>
-                <b className="text-white font-mono">{fanSpeed}% RPM</b>
-              </div>
-            </div>
-          </div>
-
+          {/* Integrated Virtual Hardware Health Component */}
+          <VirtualHardwareHealth 
+            isMining={!isPaused}
+            activeBooster={isOverclocked ? (activeBooster || 'overclock') : activeBooster}
+          />
         </div>
-
-      </div>
+      ) : (
+        /* TAB 2: Full Dedicated Virtual Hardware Health Dashboard */
+        <div className="animate-in fade-in duration-200">
+          <VirtualHardwareHealth 
+            isMining={!isPaused}
+            activeBooster={isOverclocked ? (activeBooster || 'overclock') : activeBooster}
+          />
+        </div>
+      )}
 
     </div>
   );

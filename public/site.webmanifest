@@ -1,0 +1,17 @@
+{
+  "name": "Hashforge Lab - Free Crypto Mining Simulator",
+  "short_name": "Hashforge Lab",
+  "description": "World's #1 Free Crypto Mining Simulator. Mine Bitcoin, Ethereum & Solana with zero hardware load in 42 languages.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#060a14",
+  "theme_color": "#00ff88",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

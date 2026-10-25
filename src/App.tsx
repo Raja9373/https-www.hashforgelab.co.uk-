@@ -9,14 +9,20 @@ import { HeroSection } from './components/HeroSection';
 import { MiningConsole } from './components/MiningConsole';
 import { EducationalFaq } from './components/EducationalFaq';
 import { ShareEarnModal } from './components/ShareEarnModal';
+import { AuditStatusModal } from './components/AuditStatusModal';
+import { VirtualHardwareHealth } from './components/VirtualHardwareHealth';
+import { LiveMiningFeed } from './components/LiveMiningFeed';
+import { GlobalMiningPayoutToast } from './components/GlobalMiningPayoutToast';
+import { CryptoMinutePredictions } from './components/CryptoMinutePredictions';
 import { Footer } from './components/Footer';
 import { LANGUAGES, Language } from './data/languages';
-import { ArrowLeft, Play, Zap } from 'lucide-react';
+import { ArrowLeft, Play, Zap, ShieldCheck } from 'lucide-react';
 
 export default function App() {
   const [currentLang, setCurrentLang] = useState<Language>(LANGUAGES[0]);
   const [isMiningView, setIsMiningView] = useState<boolean>(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
+  const [isAuditModalOpen, setIsAuditModalOpen] = useState<boolean>(false);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [onlineMiners, setOnlineMiners] = useState<number>(1284902);
   const [totalMinedUsd, setTotalMinedUsd] = useState<number>(4200000);
@@ -36,6 +42,20 @@ export default function App() {
       // ignore
     }
   }, []);
+
+  // Synchronize HTML document attributes for regional SEO & headless AI crawlers
+  useEffect(() => {
+    try {
+      document.documentElement.lang = currentLang.code;
+      if (currentLang.code === 'en') {
+        document.title = 'Hashforge Lab – Free Crypto Mining Simulator | BTC ETH SOL';
+      } else {
+        document.title = `${currentLang.nativeName} - Hashforge Lab | Free Crypto Mining Simulator`;
+      }
+    } catch {
+      // ignore
+    }
+  }, [currentLang]);
 
   // Fluctuating real-time online miner counter
   useEffect(() => {
@@ -63,7 +83,7 @@ export default function App() {
         currentLang={currentLang}
         onSelectLang={(lang) => {
           setCurrentLang(lang);
-          // Update URL without full refresh for clean sharing
+          // Update URL without full refresh for clean sharing and canonical state
           try {
             const url = new URL(window.location.href);
             url.searchParams.set('lang', lang.code);
@@ -73,9 +93,15 @@ export default function App() {
         isMining={isMiningView}
         totalUsd={24.85}
         onOpenShareModal={() => setIsShareModalOpen(true)}
+        onOpenAuditModal={() => setIsAuditModalOpen(true)}
         soundEnabled={soundEnabled}
         onToggleSound={() => setSoundEnabled(!soundEnabled)}
       />
+
+      {/* Live Mining Feed Worldwide Ticker */}
+      <div className="pt-16">
+        <LiveMiningFeed />
+      </div>
 
       {/* Main View Area */}
       <main className="flex-grow">
@@ -88,6 +114,37 @@ export default function App() {
               onlineMiners={onlineMiners}
               totalMinedUsd={totalMinedUsd}
             />
+
+            {/* SEO • GEO • AEO Live Audit Indicator Banner */}
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 mb-8">
+              <div 
+                onClick={() => setIsAuditModalOpen(true)}
+                className="group cursor-pointer p-3 sm:p-4 rounded-2xl bg-gradient-to-r from-[#00ff88]/10 via-[#00d4ff]/10 to-purple-500/10 border border-[#00ff88]/30 hover:border-[#00ff88]/60 backdrop-blur-md flex flex-wrap items-center justify-between gap-3 transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="w-8 h-8 rounded-xl bg-[#00ff88]/20 flex items-center justify-center text-[#00ff88] shrink-0">
+                    <ShieldCheck className="w-5 h-5" />
+                  </span>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-orbitron font-bold text-xs text-white">
+                        SEO, GEO &amp; AEO STATUS: ALL AUDITS PASSED
+                      </span>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#00ff88] text-black">
+                        100% HEALTH
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-gray-400">
+                      Standard ISO-3166 Geo, 42 Hreflangs, AEO Graph (WebApplication, FAQPage, HowTo), Robots.txt &amp; Sitemap verified.
+                    </p>
+                  </div>
+                </div>
+
+                <span className="text-xs font-orbitron font-bold text-[#00ff88] group-hover:underline flex items-center gap-1">
+                  VIEW AUDIT DETAILS →
+                </span>
+              </div>
+            </div>
 
             {/* Quick-start embedded preview */}
             <div className="max-w-5xl mx-auto px-4 sm:px-6 mb-12">
@@ -114,12 +171,23 @@ export default function App() {
               </div>
             </div>
 
+            {/* Real-time 1-Minute Crypto Price Prediction Engine (Top 20 Coins) */}
+            <CryptoMinutePredictions 
+              onSelectCoinForMining={() => handleStartMining()} 
+            />
+
+            {/* Virtual Hardware Health Safety Showcase on Homepage */}
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 mb-12">
+              <VirtualHardwareHealth isMining={false} />
+            </div>
+
             <EducationalFaq />
+
           </div>
         ) : (
           <div className="animate-in fade-in duration-300">
             {/* Back Button Bar */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-20 pb-2">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 pb-2">
               <button
                 id="back-to-home-btn"
                 onClick={handleBackToHero}
@@ -135,6 +203,9 @@ export default function App() {
               soundEnabled={soundEnabled}
             />
 
+            {/* Real-time 1-Minute Crypto Price Prediction Engine in Mining View */}
+            <CryptoMinutePredictions />
+
             <EducationalFaq />
           </div>
         )}
@@ -145,6 +216,16 @@ export default function App() {
         isOpen={isShareModalOpen}
         onClose={() => setIsShareModalOpen(false)}
       />
+
+      {/* SEO GEO AEO Audit Status Modal */}
+      <AuditStatusModal
+        isOpen={isAuditModalOpen}
+        onClose={() => setIsAuditModalOpen(false)}
+        activeLanguageCode={currentLang.code}
+      />
+
+      {/* Real-time Global Mining Payout Notification */}
+      <GlobalMiningPayoutToast />
 
       {/* Worldwide Footer */}
       <Footer

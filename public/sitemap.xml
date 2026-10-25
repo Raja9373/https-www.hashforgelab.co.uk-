@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <!-- Primary Canonical Landing Page -->
   <url>
     <loc>https://hashforgelab.co.uk/</loc>
-    <lastmod>2026-08-26</lastmod>
+    <lastmod>2026-10-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hashforgelab.co.uk/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://hashforgelab.co.uk/?lang=en"/>
     <xhtml:link rel="alternate" hreflang="hi" href="https://hashforgelab.co.uk/?lang=hi"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://hashforgelab.co.uk/?lang=es"/>
@@ -15,30 +17,81 @@
     <xhtml:link rel="alternate" hreflang="ja" href="https://hashforgelab.co.uk/?lang=ja"/>
     <xhtml:link rel="alternate" hreflang="pt" href="https://hashforgelab.co.uk/?lang=pt"/>
     <xhtml:link rel="alternate" hreflang="zh" href="https://hashforgelab.co.uk/?lang=zh"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://hashforgelab.co.uk/"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://hashforgelab.co.uk/?lang=tr"/>
+    <xhtml:link rel="alternate" hreflang="en-NG" href="https://hashforgelab.co.uk/?lang=ng"/>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://hashforgelab.co.uk/?lang=bn"/>
+    <xhtml:link rel="alternate" hreflang="ur" href="https://hashforgelab.co.uk/?lang=ur"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://hashforgelab.co.uk/?lang=it"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://hashforgelab.co.uk/?lang=ko"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://hashforgelab.co.uk/?lang=vi"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://hashforgelab.co.uk/?lang=id"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://hashforgelab.co.uk/?lang=th"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://hashforgelab.co.uk/?lang=pl"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://hashforgelab.co.uk/?lang=nl"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://hashforgelab.co.uk/?lang=uk"/>
+    <xhtml:link rel="alternate" hreflang="ro" href="https://hashforgelab.co.uk/?lang=ro"/>
+    <xhtml:link rel="alternate" hreflang="el" href="https://hashforgelab.co.uk/?lang=el"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://hashforgelab.co.uk/?lang=cs"/>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://hashforgelab.co.uk/?lang=sv"/>
+    <xhtml:link rel="alternate" hreflang="hu" href="https://hashforgelab.co.uk/?lang=hu"/>
+    <xhtml:link rel="alternate" hreflang="tl" href="https://hashforgelab.co.uk/?lang=tl"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://hashforgelab.co.uk/?lang=fa"/>
+    <xhtml:link rel="alternate" hreflang="sw" href="https://hashforgelab.co.uk/?lang=sw"/>
+    <xhtml:link rel="alternate" hreflang="he" href="https://hashforgelab.co.uk/?lang=he"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://hashforgelab.co.uk/?lang=ms"/>
+    <xhtml:link rel="alternate" hreflang="fi" href="https://hashforgelab.co.uk/?lang=fi"/>
+    <xhtml:link rel="alternate" hreflang="da" href="https://hashforgelab.co.uk/?lang=da"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://hashforgelab.co.uk/?lang=no"/>
+    <xhtml:link rel="alternate" hreflang="ta" href="https://hashforgelab.co.uk/?lang=ta"/>
+    <xhtml:link rel="alternate" hreflang="te" href="https://hashforgelab.co.uk/?lang=te"/>
+    <xhtml:link rel="alternate" hreflang="mr" href="https://hashforgelab.co.uk/?lang=mr"/>
+    <xhtml:link rel="alternate" hreflang="pa" href="https://hashforgelab.co.uk/?lang=pa"/>
+    <xhtml:link rel="alternate" hreflang="gu" href="https://hashforgelab.co.uk/?lang=gu"/>
+    <xhtml:link rel="alternate" hreflang="ml" href="https://hashforgelab.co.uk/?lang=ml"/>
+    <xhtml:link rel="alternate" hreflang="ha" href="https://hashforgelab.co.uk/?lang=ha"/>
   </url>
-  <url>
-    <loc>https://hashforgelab.co.uk/?lang=en</loc>
-    <lastmod>2026-08-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://hashforgelab.co.uk/?lang=hi</loc>
-    <lastmod>2026-08-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://hashforgelab.co.uk/?lang=es</loc>
-    <lastmod>2026-08-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.hashforgelab.co.uk/</loc>
-    <lastmod>2026-08-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
+
+  <!-- 42 Worldwide Localized Regional Language Endpoints -->
+  <url><loc>https://hashforgelab.co.uk/?lang=en</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=hi</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=es</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=ar</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=fr</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=de</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=ru</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=ja</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=pt</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=zh</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=tr</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=ng</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=bn</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=ur</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=it</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=ko</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=vi</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=id</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=th</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=pl</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=nl</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=uk</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=ro</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=el</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=cs</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=sv</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=hu</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=tl</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=fa</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=sw</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=he</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=ms</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=fi</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=da</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=no</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=ta</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=te</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=mr</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=pa</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=gu</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=ml</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://hashforgelab.co.uk/?lang=ha</loc><lastmod>2026-10-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
 </urlset>

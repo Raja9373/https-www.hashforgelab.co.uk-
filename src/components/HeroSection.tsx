@@ -18,7 +18,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   totalMinedUsd
 }) => {
   return (
-    <section className="relative pt-28 pb-16 px-4 sm:px-6 overflow-hidden bg-gradient-to-b from-[#060a14] via-[#081124] to-[#060a14]">
+    <section className="relative pt-10 sm:pt-14 pb-16 px-4 sm:px-6 overflow-hidden bg-gradient-to-b from-[#060a14] via-[#081124] to-[#060a14]">
       
       {/* Background ambient lighting */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-[#00ff88]/10 blur-[130px] rounded-full pointer-events-none -z-10" />
@@ -179,12 +179,28 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         </div>
 
-        {/* SEO Keywords Card */}
+        {/* SEO Multilingual Keywords Card */}
         <div className="p-4 sm:p-5 rounded-2xl bg-[#00ff88]/[0.04] border border-dashed border-[#00ff88]/30 max-w-4xl mx-auto text-xs text-gray-400 text-left leading-relaxed">
-          <strong className="text-white font-mono block mb-1">
-            🔍 Popular Searches & Keywords:
-          </strong>
-          free crypto mining, free bitcoin mining simulator, free ethereum mining, free solana mining, browser mining free, no hardware mining, free mining without investment, crypto mining game free, hashforge lab, hashforgelab.co.uk, free mining UK, free mining India, free mining USA, Bitcoin mining free app, educational mining simulator, dogecoin mining free, kaspa mining simulation.
+          <div className="flex items-center justify-between mb-1">
+            <strong className="text-white font-mono">
+              🔍 Worldwide Google &amp; AI Popular Searches (42 Languages):
+            </strong>
+            <a href="#global-keyword-directory" className="text-[#00ff88] font-mono text-[11px] hover:underline">
+              View All 42 Languages →
+            </a>
+          </div>
+          <p className="text-[11px] text-gray-300 leading-normal">
+            <strong>English:</strong> free crypto mining, bitcoin mining simulator, mine ethereum free online, solana mining simulator, browser mining free, no hardware mining • 
+            <strong className="text-[#00ff88]"> हिन्दी:</strong> फ्री बिटकॉइन माइनिंग, मुफ्त क्रिप्टो माइनिंग सिम्युलेटर, बिना पैसे लगाए बिटकॉइन माइनिंग • 
+            <strong className="text-[#00d4ff]"> Español:</strong> minería de criptomonedas gratis, simulador mineria bitcoin gratis, minar ethereum sin hardware • 
+            <strong className="text-purple-300"> العربية:</strong> تعدين بيتكوين مجاني, محاكي تعدين العملات الرقمية مجانا, تعدين ايثريوم بدون اجهزة • 
+            <strong className="text-yellow-300"> Français:</strong> minage crypto gratuit, simulateur minage bitcoin gratuit • 
+            <strong className="text-orange-300"> Deutsch:</strong> kostenloses krypto mining, bitcoin mining simulator kostenlos • 
+            <strong className="text-pink-300"> Русский:</strong> бесплатный майнинг криптовалют, симулятор майнинга биткоин • 
+            <strong className="text-teal-300"> 日本語:</strong> 無料暗号資産マイニング, ビットコインマイニングシミュレーター • 
+            <strong className="text-emerald-300"> 简体中文:</strong> 免费加密货币挖矿, 免费比特币挖矿模拟器, 无需硬件挖矿 • 
+            <strong className="text-cyan-300"> Türkçe:</strong> ücretsiz kripto madencilik simülatörü.
+          </p>
         </div>
 
       </div>

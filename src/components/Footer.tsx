@@ -69,8 +69,11 @@ export const Footer: React.FC<FooterProps> = ({ onSelectLang, currentLang }) => 
           <p className="font-mono text-gray-300">
             © 2026 hashforgelab.co.uk - Free Crypto Mining Simulator Worldwide - Educational Purpose Only - 42 Languages - 180+ Countries - SEO Optimized
           </p>
-          <p className="text-[11px] text-gray-500">
-            Free Bitcoin Mining | Free Ethereum Mining | Free Solana Mining | No Hardware Mining | Browser Mining Free | Dogecoin Simulator | Kaspa Simulator
+          <p className="text-[11px] text-gray-400">
+            Free Bitcoin Mining • Free Ethereum Mining • Free Solana Mining • No Hardware Mining • Browser Mining Free • Dogecoin Simulator • Kaspa Simulator
+          </p>
+          <p className="text-[10px] text-gray-500 font-mono">
+            Trending Regional Queries: फ्री बिटकॉइन माइनिंग • Minería Criptomonedas Gratis • تعدين بيتكوين مجاني • Minage Crypto Gratuit • Kostenloses Krypto Mining • Бесплатный Майнинг • 無料暗号資産マイニング • 免费比特币挖矿 • Ücretsiz Kripto Madenciliği • Đào Coin Miễn Phí • Mining Kripto Gratis
           </p>
           <p className="text-[10px] text-gray-600">
             Disclaimer: Hashforge Lab is an educational browser-based cryptocurrency simulator designed for learning blockchain mechanics. It does not perform actual hardware proof-of-work mining on your physical device.

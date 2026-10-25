@@ -1,3 +1,40 @@
+# Hashforge Lab - Robots.txt for Search & AI Answer Engines
+# Worldwide SEO, GEO, and AEO Optimized
+
 User-agent: *
 Allow: /
+Disallow: /api/
+
+# Explicit permissions for AI Search & Answer Engines (AEO)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+Host: https://hashforgelab.co.uk
 Sitemap: https://hashforgelab.co.uk/sitemap.xml
