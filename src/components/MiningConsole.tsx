@@ -15,11 +15,16 @@ import {
   Sliders,
   DollarSign,
   ShieldCheck,
-  Wind
+  Wind,
+  Volume2,
+  VolumeX,
+  Bell,
+  BellOff
 } from 'lucide-react';
 import { Coin, COINS, MINING_RIGS, MiningRig } from '../data/coins';
 import { VirtualHardwareHealth } from './VirtualHardwareHealth';
 import { MarketSentiment } from './MarketSentiment';
+import { AchievementsPanel } from './AchievementsPanel';
 
 interface MiningConsoleProps {
   onOpenShareModal: () => void;
@@ -36,6 +41,15 @@ export const MiningConsole: React.FC<MiningConsoleProps> = ({
   const [activeBooster, setActiveBooster] = useState<string | null>(null);
   const [consoleTab, setConsoleTab] = useState<'console' | 'hardware_health'>('console');
   const [isOverclocked, setIsOverclocked] = useState<boolean>(false);
+
+  // Audio Controls State
+  const [miningHumEnabled, setMiningHumEnabled] = useState<boolean>(true);
+  const [transactionClickEnabled, setTransactionClickEnabled] = useState<boolean>(true);
+
+  // Hash Power Leveling System State
+  const [miningXp, setMiningXp] = useState<number>(450);
+  const [miningLevel, setMiningLevel] = useState<number>(2);
+  const levelEfficiencyBonus = 1 + (miningLevel - 1) * 0.08;
 
   // Mining Metrics State
   const [hashRate, setHashRate] = useState<number>(640);
@@ -66,9 +80,9 @@ export const MiningConsole: React.FC<MiningConsoleProps> = ({
     '> [SHARE ACCEPTED] Nonce 0x7f48ac29 verified by Global Validator #1294 ✅'
   ]);
 
-  // Audio tone generation for mining SFX
+  // Audio tone generation for transaction click SFX
   const playBeep = () => {
-    if (!soundEnabled) return;
+    if (!soundEnabled || !transactionClickEnabled) return;
     try {
       const audioCtx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
       const osc = audioCtx.createOscillator();
@@ -85,6 +99,31 @@ export const MiningConsole: React.FC<MiningConsoleProps> = ({
       // Audio context might be restricted before user gesture
     }
   };
+
+  // Periodic ASIC Mining Hum audio simulation
+  useEffect(() => {
+    if (!soundEnabled || !miningHumEnabled || isPaused) return;
+
+    const humInterval = setInterval(() => {
+      try {
+        const audioCtx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(isOverclocked ? 72 : 55, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.012, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.4);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.4);
+      } catch {
+        // Audio restriction
+      }
+    }, 3500);
+
+    return () => clearInterval(humInterval);
+  }, [soundEnabled, miningHumEnabled, isPaused, isOverclocked]);
 
   // Toggle simulated overclock (+20% hashrate boost & high power UI)
   const toggleOverclock = () => {
@@ -106,6 +145,19 @@ export const MiningConsole: React.FC<MiningConsoleProps> = ({
     });
   };
 
+  // Handle claiming achievement XP reward
+  const handleClaimReward = (rewardXp: number) => {
+    setMiningXp((prev) => {
+      const nextXp = prev + rewardXp;
+      playBeep();
+      setLogs((l) => [
+        `> 🏆 [ACHIEVEMENT REWARD CLAIMED!] +${rewardXp} XP added to your rig!`,
+        ...l.slice(0, 15)
+      ]);
+      return nextXp;
+    });
+  };
+
   // Main mining loop
   useEffect(() => {
     if (isPaused) return;
@@ -120,9 +172,27 @@ export const MiningConsole: React.FC<MiningConsoleProps> = ({
       // Simulated Overclock multiplier: +20% boost
       const overclockMult = isOverclocked ? 1.20 : 1.0;
 
-      const baseHash = (Math.random() * 400 + 450) * selectedRig.multiplier * boostMult * overclockMult;
+      const baseHash = (Math.random() * 400 + 450) * selectedRig.multiplier * boostMult * overclockMult * levelEfficiencyBonus;
       setHashRate(baseHash);
       setProgressBar((prev) => (prev + 4.5) % 100);
+
+      // Accumulate Hash Power Experience Points (XP)
+      setMiningXp((prevXp) => {
+        const nextXp = prevXp + 1;
+        const currentGoal = miningLevel * 500;
+        if (nextXp >= currentGoal) {
+          setMiningLevel((lvl) => {
+            const nextLvl = lvl + 1;
+            setLogs((l) => [
+              `> 🏆 [LEVEL UP!] Rig reached Level ${nextLvl}! Efficiency multiplier increased to +${(nextLvl - 1) * 8}%.`,
+              ...l.slice(0, 15)
+            ]);
+            playBeep();
+            return nextLvl;
+          });
+        }
+        return nextXp;
+      });
 
       // Fluctuate hardware stats with overclock boost
       setTemp(45 + Math.floor(Math.random() * 12) + (activeBooster ? 6 : 0) + (isOverclocked ? 8 : 0));
@@ -250,6 +320,49 @@ export const MiningConsole: React.FC<MiningConsoleProps> = ({
           >
             <Share2 className="w-3.5 h-3.5" />
             SHARE &amp; EARN $$$
+          </button>
+        </div>
+      </div>
+
+      {/* Audio Controls Section */}
+      <div className="bg-white/[0.04] border border-white/10 rounded-2xl p-3.5 mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-xl bg-[#00ff88]/15 border border-[#00ff88]/30 flex items-center justify-center text-[#00ff88]">
+            <Volume2 className="w-4 h-4" />
+          </div>
+          <div>
+            <h4 className="font-orbitron font-bold text-xs text-white">SIMULATION AUDIO CONTROLS</h4>
+            <p className="text-[10px] text-gray-400">Toggle immersive sound effects for mining rigs and share success.</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2.5 w-full sm:w-auto">
+          {/* Mining Hum Toggle */}
+          <button
+            onClick={() => setMiningHumEnabled(!miningHumEnabled)}
+            className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl text-xs font-orbitron font-bold border transition-all cursor-pointer ${
+              miningHumEnabled
+                ? 'bg-[#00ff88]/15 text-[#00ff88] border-[#00ff88]/40 shadow-[0_0_15px_rgba(0,255,136,0.2)]'
+                : 'bg-black/30 text-gray-400 border-white/10 hover:border-white/20'
+            }`}
+            title="Toggle Continuous ASIC Mining Hum / Fan Drone"
+          >
+            {miningHumEnabled ? <Volume2 className="w-3.5 h-3.5 text-[#00ff88]" /> : <VolumeX className="w-3.5 h-3.5 text-gray-500" />}
+            <span>Mining Hum: {miningHumEnabled ? 'ON' : 'OFF'}</span>
+          </button>
+
+          {/* Transaction Click Toggle */}
+          <button
+            onClick={() => setTransactionClickEnabled(!transactionClickEnabled)}
+            className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl text-xs font-orbitron font-bold border transition-all cursor-pointer ${
+              transactionClickEnabled
+                ? 'bg-[#00d4ff]/15 text-[#00d4ff] border-[#00d4ff]/40 shadow-[0_0_15px_rgba(0,212,255,0.2)]'
+                : 'bg-black/30 text-gray-400 border-white/10 hover:border-white/20'
+            }`}
+            title="Toggle Share Success & Transaction Click Chime"
+          >
+            {transactionClickEnabled ? <Bell className="w-3.5 h-3.5 text-[#00d4ff]" /> : <BellOff className="w-3.5 h-3.5 text-gray-500" />}
+            <span>Tx Click: {transactionClickEnabled ? 'ON' : 'OFF'}</span>
           </button>
         </div>
       </div>
@@ -385,6 +498,56 @@ export const MiningConsole: React.FC<MiningConsoleProps> = ({
                   </div>
                 </div>
               </div>
+
+              {/* Hash Power Leveling System Widget */}
+              <div className="bg-gradient-to-r from-purple-950/40 via-blue-950/30 to-black/60 border border-purple-500/30 rounded-3xl p-5 relative overflow-hidden shadow-[0_0_25px_rgba(138,43,226,0.15)]">
+                <div className="absolute -top-10 -right-10 w-36 h-36 bg-purple-500/20 rounded-full blur-2xl pointer-events-none" />
+                
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="w-8 h-8 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-300 font-bold">
+                      🏆
+                    </span>
+                    <div>
+                      <h4 className="font-orbitron font-bold text-sm text-white flex items-center gap-2">
+                        HASH POWER LEVELING <span className="px-2 py-0.5 rounded-full text-[10px] bg-purple-500 text-black font-extrabold">LEVEL {miningLevel}</span>
+                      </h4>
+                      <p className="text-[11px] text-gray-400">
+                        Active Efficiency Bonus: <span className="text-[#00ff88] font-bold">+{(miningLevel - 1) * 8}% Multiplier</span>
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="text-right font-mono">
+                    <span className="text-xs text-purple-300 font-bold">{miningXp} / {miningLevel * 500} XP</span>
+                  </div>
+                </div>
+
+                {/* Level XP Progress Bar */}
+                <div className="space-y-1.5">
+                  <div className="w-full h-3 bg-black/60 rounded-full overflow-hidden p-0.5 border border-purple-500/30">
+                    <div 
+                      className="h-full rounded-full bg-gradient-to-r from-[#00ff88] via-[#00d4ff] to-purple-500 shadow-[0_0_15px_rgba(138,43,226,0.7)] transition-all duration-300"
+                      style={{ width: `${Math.min(100, (miningXp / (miningLevel * 500)) * 100)}%` }}
+                    />
+                  </div>
+                  <div className="flex justify-between text-[10px] text-gray-400 font-mono">
+                    <span>Progress to Level {miningLevel + 1}</span>
+                    <span>{Math.round((miningXp / (miningLevel * 500)) * 100)}% Complete</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Achievements & Digital Badges Panel */}
+              <AchievementsPanel 
+                miningLevel={miningLevel}
+                miningXp={miningXp}
+                sharesAccepted={sharesAccepted}
+                isOverclocked={isOverclocked}
+                hashRate={hashRate}
+                activeBooster={activeBooster}
+                onClaimReward={handleClaimReward}
+              />
 
               {/* Rig Selectors */}
               <div className="bg-white/[0.04] border border-white/10 rounded-3xl p-5">

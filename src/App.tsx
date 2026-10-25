@@ -52,6 +52,19 @@ export default function App() {
       } else {
         document.title = `${currentLang.nativeName} - Hashforge Lab | Free Crypto Mining Simulator`;
       }
+
+      // Update canonical tag dynamically for each language to ensure GSC indexes parameterized language URLs correctly
+      let canonicalLink = document.querySelector('link[rel="canonical"]');
+      if (!canonicalLink) {
+        canonicalLink = document.createElement('link');
+        canonicalLink.setAttribute('rel', 'canonical');
+        document.head.appendChild(canonicalLink);
+      }
+      if (currentLang.code === 'en') {
+        canonicalLink.setAttribute('href', 'https://hashforgelab.co.uk/');
+      } else {
+        canonicalLink.setAttribute('href', `https://hashforgelab.co.uk/?lang=${currentLang.code}`);
+      }
     } catch {
       // ignore
     }
