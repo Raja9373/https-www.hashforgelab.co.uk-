@@ -36,5 +36,7 @@ Allow: /
 User-agent: YandexBot
 Allow: /
 
-Host: https://hashforgelab.co.uk
-Sitemap: https://hashforgelab.co.uk/sitemap.xml
+Host: https://www.hashforgelab.co.uk
+Sitemap: https://www.hashforgelab.co.uk/sitemap-index.xml
+Sitemap: https://www.hashforgelab.co.uk/sitemap.xml
+Sitemap: https://www.hashforgelab.co.uk/sitemap-guides.xml

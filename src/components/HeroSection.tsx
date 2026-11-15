@@ -179,15 +179,26 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         </div>
 
-        {/* SEO Multilingual Keywords Card */}
-        <div className="p-4 sm:p-5 rounded-2xl bg-[#00ff88]/[0.04] border border-dashed border-[#00ff88]/30 max-w-4xl mx-auto text-xs text-gray-400 text-left leading-relaxed">
-          <div className="flex items-center justify-between mb-1">
+        {/* Contextual Internal Linking & Multilingual Search Discovery Bar */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-[#00ff88]/[0.04] border border-dashed border-[#00ff88]/30 max-w-4xl mx-auto text-xs text-gray-400 text-left leading-relaxed space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <strong className="text-white font-mono">
-              🔍 Worldwide Google &amp; AI Popular Searches (42 Languages):
+              Explore Technical Resources &amp; 42-Language Indexing:
             </strong>
-            <a href="#global-keyword-directory" className="text-[#00ff88] font-mono text-[11px] hover:underline">
-              View All 42 Languages →
-            </a>
+            <div className="flex flex-wrap items-center gap-3 font-mono text-[11px]">
+              <a href="#mining-calculator" className="text-[#00ff88] hover:underline">
+                PoW kWh Calculator →
+              </a>
+              <a href="#algorithm-research-hub" className="text-[#00d4ff] hover:underline">
+                SHA-256 &amp; Algo Specs →
+              </a>
+              <a href="#authority-guides" className="text-purple-300 hover:underline">
+                ASIC vs. Sim Guides →
+              </a>
+              <a href="#supported-languages-sitemap" className="text-[#00ff88] hover:underline">
+                All 42 Languages →
+              </a>
+            </div>
           </div>
           <p className="text-[11px] text-gray-300 leading-normal">
             <strong>English:</strong> free crypto mining, bitcoin mining simulator, mine ethereum free online, solana mining simulator, browser mining free, no hardware mining • 

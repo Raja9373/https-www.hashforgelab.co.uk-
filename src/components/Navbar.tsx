@@ -54,27 +54,49 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           </a>
 
-          {/* 1-Minute Predictions & Audit Nav Badges */}
-          <div className="hidden lg:flex items-center gap-2 ml-3">
+          {/* Primary Section Navigation Links */}
+          <nav aria-label="Primary Navigation" className="hidden xl:flex items-center gap-4 ml-4 text-xs font-medium text-gray-300">
+            <a
+              href="#mining-calculator"
+              className="hover:text-[#00ff88] transition-colors whitespace-nowrap"
+            >
+              kWh Calculator
+            </a>
+            <a
+              href="#algorithm-research-hub"
+              className="hover:text-[#00ff88] transition-colors whitespace-nowrap"
+            >
+              PoW Algorithms
+            </a>
+            <a
+              href="#authority-guides"
+              className="hover:text-[#00ff88] transition-colors whitespace-nowrap"
+            >
+              Mining Guides
+            </a>
             <a
               href="#crypto-minute-predictions"
               title="Top 20 Crypto 1-Minute Price Predictions & Status"
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-[#00d4ff]/10 hover:bg-[#00d4ff]/20 text-[#00d4ff] border border-[#00d4ff]/30 shadow-[0_0_10px_rgba(0,212,255,0.2)] transition-all cursor-pointer"
+              className="hover:text-[#00d4ff] transition-colors whitespace-nowrap"
             >
-              <Clock className="w-3.5 h-3.5 text-[#00d4ff]" />
-              <span>1M PREDICTIONS</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00ff88] animate-ping" />
+              1m Signals
             </a>
-
+            <a
+              href="#faq-knowledge-base"
+              className="hover:text-[#00ff88] transition-colors whitespace-nowrap"
+            >
+              FAQ
+            </a>
             <button
+              type="button"
               onClick={onOpenAuditModal}
-              title="View SEO • GEO • AEO Audit Verification"
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#00ff88]/10 hover:bg-[#00ff88]/20 text-[#00ff88] border border-[#00ff88]/30 shadow-[0_0_10px_rgba(0,255,136,0.2)] transition-all cursor-pointer"
+              title="View SEO, Search Intent & GSC Readiness Center"
+              className="inline-flex items-center gap-1 text-[#00ff88] hover:underline font-mono text-xs cursor-pointer whitespace-nowrap"
             >
               <ShieldCheck className="w-3.5 h-3.5 text-[#00ff88]" />
-              <span>SEO • GEO • AEO: 100%</span>
+              <span>SEO Center</span>
             </button>
-          </div>
+          </nav>
         </div>
 
         {/* Action Controls */}
