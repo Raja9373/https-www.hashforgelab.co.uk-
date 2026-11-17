@@ -38,7 +38,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         
         {/* Brand Logo */}
         <div className="flex items-center gap-3">
-          <a href="#" className="flex items-center gap-2 group text-decoration-none">
+          <a href="/" className="flex items-center gap-2 group text-decoration-none">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#00ff88] via-[#00d4ff] to-[#8a2be2] p-[1.5px] shadow-[0_0_15px_rgba(0,255,136,0.4)] group-hover:shadow-[0_0_25px_rgba(0,255,136,0.7)] transition-all duration-300">
               <div className="w-full h-full bg-[#060a14] rounded-[10px] flex items-center justify-center">
                 <Zap className="w-5 h-5 text-[#00ff88] animate-pulse" />

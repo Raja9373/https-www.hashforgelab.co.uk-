@@ -25,7 +25,7 @@ export const ShareEarnModal: React.FC<ShareEarnModalProps> = ({ isOpen, onClose 
 
   if (!isOpen) return null;
 
-  const shareUrl = 'https://hashforgelab.co.uk';
+  const shareUrl = 'https://www.hashforgelab.co.uk/';
   const shareText = '⚡ Mine Bitcoin, Ethereum & Solana for FREE with 0 hardware load! 42 languages, 180+ countries. Start free simulation now at Hashforge Lab:';
 
   const handleCopy = () => {

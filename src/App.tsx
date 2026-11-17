@@ -19,6 +19,7 @@ import { ContentAuthorityHub } from './components/ContentAuthorityHub';
 import { TrustGovernanceSection, TrustTabId } from './components/TrustGovernanceSection';
 import { Footer } from './components/Footer';
 import { LANGUAGES, Language } from './data/languages';
+import { getLocaleCopy } from './data/translations';
 import { ArrowLeft, Zap, ShieldCheck, ChevronRight } from 'lucide-react';
 
 export default function App() {
@@ -78,8 +79,10 @@ export default function App() {
   // Unified handler to switch language & sync URL query parameter
   const handleSelectLanguage = (lang: Language) => {
     setCurrentLang(lang);
+    setActiveSectionParam(null);
     try {
       const url = new URL(window.location.href);
+      url.searchParams.delete('section');
       if (lang.code === 'en') {
         url.searchParams.delete('lang');
       } else {
@@ -124,9 +127,9 @@ export default function App() {
         }
       };
 
-      let pageTitle = 'Hashforge Lab – Free Crypto Mining Simulator | BTC ETH SOL';
-      let pageDesc =
-        "World's #1 free crypto mining simulator. Mine Bitcoin, Ethereum & Solana with zero hardware load and 0 electricity bills. 42 languages, 100% safe.";
+      const localeCopy = getLocaleCopy(currentLang.code, currentLang.nativeName, currentLang.slogan);
+      let pageTitle = localeCopy.pageTitle;
+      let pageDesc = localeCopy.metaDescription;
       let canonicalHref = 'https://www.hashforgelab.co.uk/';
 
       if (activeSectionParam && sectionMetaMap[activeSectionParam] && currentLang.code === 'en') {
@@ -134,16 +137,24 @@ export default function App() {
         pageDesc = sectionMetaMap[activeSectionParam].desc;
         canonicalHref = `https://www.hashforgelab.co.uk/?section=${activeSectionParam}`;
       } else if (currentLang.code !== 'en') {
-        pageTitle = `${currentLang.nativeName} – Hashforge Lab | Free Crypto Mining Simulator`;
         canonicalHref = `https://www.hashforgelab.co.uk/?lang=${currentLang.code}`;
       }
 
       document.title = pageTitle;
 
-      const descMeta = document.querySelector('meta[name="description"]');
-      if (descMeta) {
-        descMeta.setAttribute('content', pageDesc);
-      }
+      const metaUpdates: Array<[string, string]> = [
+        ['meta[name="description"]', pageDesc],
+        ['meta[property="og:title"]', pageTitle],
+        ['meta[property="og:description"]', pageDesc],
+        ['meta[property="og:url"]', canonicalHref],
+        ['meta[name="twitter:title"]', pageTitle],
+        ['meta[name="twitter:description"]', pageDesc]
+      ];
+
+      metaUpdates.forEach(([selector, value]) => {
+        const el = document.querySelector(selector);
+        if (el) el.setAttribute('content', value);
+      });
 
       let canonicalLink = document.querySelector('link[rel="canonical"]');
       if (!canonicalLink) {
@@ -152,11 +163,6 @@ export default function App() {
         document.head.appendChild(canonicalLink);
       }
       canonicalLink.setAttribute('href', canonicalHref);
-
-      const ogUrlMeta = document.querySelector('meta[property="og:url"]');
-      if (ogUrlMeta) {
-        ogUrlMeta.setAttribute('content', canonicalHref);
-      }
     } catch {
       // ignore
     }
@@ -387,7 +393,7 @@ export default function App() {
             </div>
 
             {/* AEO Structured FAQ Knowledge Base */}
-            <EducationalFaq />
+            <EducationalFaq currentLang={currentLang} />
 
             {/* E-E-A-T Trust, Editorial Policy, Privacy Policy, Terms & Contact Center */}
             <TrustGovernanceSection
@@ -420,7 +426,7 @@ export default function App() {
             {/* Real-time 1-Minute Crypto Price Prediction Engine in Mining View */}
             <CryptoMinutePredictions />
 
-            <EducationalFaq />
+            <EducationalFaq currentLang={currentLang} />
 
             <TrustGovernanceSection
               activeTab={activeTrustTab}

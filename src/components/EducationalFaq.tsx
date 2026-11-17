@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
-import { ChevronDown, HelpCircle, Bot, Sparkles, CheckCircle2, ShieldAlert } from 'lucide-react';
+import { ChevronDown, HelpCircle, Bot } from 'lucide-react';
+import { Language, LANGUAGES } from '../data/languages';
+import { getLocaleCopy } from '../data/translations';
 
-export const EducationalFaq: React.FC = () => {
+interface EducationalFaqProps {
+  currentLang?: Language;
+}
+
+export const EducationalFaq: React.FC<EducationalFaqProps> = ({ currentLang = LANGUAGES[0] }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const copy = getLocaleCopy(currentLang.code, currentLang.nativeName, currentLang.slogan);
 
   const faqs = [
     {
@@ -56,10 +63,10 @@ export const EducationalFaq: React.FC = () => {
           <HelpCircle className="w-3.5 h-3.5" /> AEO-STRUCTURED KNOWLEDGE BASE
         </span>
         <h2 className="font-orbitron font-extrabold text-2xl sm:text-3xl text-white">
-          Frequently Asked Questions
+          {copy.faqTitle}
         </h2>
         <p className="text-xs text-gray-400 mt-1 max-w-md mx-auto">
-          Direct, verified answers indexed for Google Search, AI Overviews, Perplexity &amp; ChatGPT.
+          {copy.faqSubtitle}
         </p>
       </div>
 

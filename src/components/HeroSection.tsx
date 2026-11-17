@@ -1,6 +1,7 @@
 import React from 'react';
 import { Play, ShieldCheck, Cpu, Flame, CheckCircle, Globe2 } from 'lucide-react';
 import { Language, LANGUAGES } from '../data/languages';
+import { getLocaleCopy } from '../data/translations';
 
 interface HeroSectionProps {
   currentLang: Language;
@@ -17,6 +18,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   onlineMiners,
   totalMinedUsd
 }) => {
+  const copy = getLocaleCopy(currentLang.code, currentLang.nativeName, currentLang.slogan);
+
   return (
     <section className="relative pt-10 sm:pt-14 pb-16 px-4 sm:px-6 overflow-hidden bg-gradient-to-b from-[#060a14] via-[#081124] to-[#060a14]">
       
@@ -29,16 +32,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         {/* Top Notification Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.05] border border-[#00ff88]/30 shadow-[0_0_20px_rgba(0,255,136,0.15)] mb-6 animate-pulse">
           <span className="w-2.5 h-2.5 rounded-full bg-[#00ff88] shadow-[0_0_8px_#00ff88]" />
-          <span className="text-xs font-mono font-bold tracking-wide text-gray-200">
-            NETWORK ACTIVE • <span className="text-[#00ff88]">180+ COUNTRIES CONNECTED</span>
+          <span className="text-xs font-mono font-bold tracking-wide text-[#00ff88]">
+            {copy.networkBadge}
           </span>
         </div>
 
         {/* Main Title */}
         <h1 className="font-orbitron text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white leading-tight mb-4">
-          World's Most Advanced <br />
+          {copy.heroTitlePrefix} <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00ff88] via-[#00d4ff] to-[#8a2be2] drop-shadow-[0_0_35px_rgba(0,255,136,0.5)]">
-            FREE Mining Lab
+            {copy.heroTitleHighlight}
           </span>
         </h1>
 
@@ -52,40 +55,49 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
         {/* Description */}
         <p className="text-gray-300 max-w-3xl mx-auto text-sm sm:text-base md:text-lg leading-relaxed mb-6">
-          ⚡ Free Bitcoin Mining Simulator • Free Ethereum Mining • Free Solana Mining • No hardware. No electricity bill. 100% safe educational simulation. Mine BTC, ETH, SOL & 12+ coins. Trusted in 180+ countries.
+          ⚡ {copy.heroDescription}
           <br />
           <strong className="text-[#00ff88] font-semibold">
-            hashforgelab.co.uk is now LIVE & MONETIZED Worldwide!
+            www.hashforgelab.co.uk
           </strong>
         </p>
 
-        {/* 42 Languages Quick Selector Bar */}
+        {/* 42 Languages Quick Selector Bar (Crawlable hreflang links) */}
         <div className="mb-8">
           <div className="flex items-center justify-center gap-1.5 text-xs text-gray-400 mb-2 font-mono">
             <Globe2 className="w-3.5 h-3.5 text-[#00ff88]" />
             <span>42 GLOBAL LOCALIZATIONS (CLICK TO SWITCH):</span>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-2 max-w-4xl mx-auto">
-            {LANGUAGES.slice(0, 14).map((lang) => (
-              <button
-                key={lang.code}
-                onClick={() => onSelectLang(lang)}
-                className={`px-3 py-1.5 rounded-full text-xs transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
-                  currentLang.code === lang.code
-                    ? 'bg-[#00ff88] text-black font-bold shadow-[0_0_15px_rgba(0,255,136,0.6)] scale-105'
-                    : 'bg-white/[0.06] hover:bg-white/[0.12] text-gray-300 hover:text-white border border-white/10 hover:border-[#00ff88]/40'
-                }`}
-              >
-                <span>{lang.flag}</span>
-                <span>{lang.nativeName}</span>
-              </button>
-            ))}
+            {LANGUAGES.slice(0, 14).map((lang) => {
+              const hrefUrl = lang.code === 'en' ? '/' : `/?lang=${lang.code}`;
+              return (
+                <a
+                  key={lang.code}
+                  href={hrefUrl}
+                  hrefLang={lang.code === 'ng' ? 'en-NG' : lang.code}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onSelectLang(lang);
+                  }}
+                  className={`px-3 py-1.5 rounded-full text-xs transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
+                    currentLang.code === lang.code
+                      ? 'bg-[#00ff88] text-black font-bold shadow-[0_0_15px_rgba(0,255,136,0.6)] scale-105'
+                      : 'bg-white/[0.06] hover:bg-white/[0.12] text-gray-300 hover:text-white border border-white/10 hover:border-[#00ff88]/40'
+                  }`}
+                >
+                  <span>{lang.flag}</span>
+                  <span>{lang.nativeName}</span>
+                </a>
+              );
+            })}
             <button
+              type="button"
               onClick={() => {
                 const el = document.getElementById('lang-dropdown-trigger');
                 el?.click();
               }}
-              className="px-3 py-1.5 rounded-full text-xs bg-white/[0.06] hover:bg-[#00d4ff]/20 text-[#00d4ff] border border-[#00d4ff]/30 font-semibold"
+              className="px-3 py-1.5 rounded-full text-xs bg-white/[0.06] hover:bg-[#00d4ff]/20 text-[#00d4ff] border border-[#00d4ff]/30 font-semibold cursor-pointer"
             >
               +28 more languages...
             </button>
@@ -98,14 +110,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <span className="font-orbitron font-extrabold text-2xl sm:text-3xl text-[#00ff88] block mb-1">
               {onlineMiners.toLocaleString()}
             </span>
-            <span className="text-xs text-gray-400 font-medium">Miners Online Worldwide</span>
+            <span className="text-xs text-gray-400 font-medium">{copy.statsMiners}</span>
           </div>
 
           <div className="bg-white/[0.05] border border-white/10 hover:border-[#00d4ff]/30 rounded-2xl p-5 backdrop-blur-lg transition-all">
             <span className="font-orbitron font-extrabold text-2xl sm:text-3xl text-[#00d4ff] block mb-1">
               ${(totalMinedUsd + 4200000).toLocaleString(undefined, { maximumFractionDigits: 0 })}+
             </span>
-            <span className="text-xs text-gray-400 font-medium">Simulated Mined Free</span>
+            <span className="text-xs text-gray-400 font-medium">{copy.statsMined}</span>
           </div>
 
           <div className="bg-white/[0.05] border border-white/10 hover:border-[#8a2be2]/30 rounded-2xl p-5 backdrop-blur-lg transition-all">
@@ -113,7 +125,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <span className="w-3 h-3 rounded-full bg-[#00ff88] animate-ping" />
               LIVE
             </span>
-            <span className="text-xs text-gray-400 font-medium">hashforgelab.co.uk UK</span>
+            <span className="text-xs text-gray-400 font-medium">{copy.statsPool}</span>
           </div>
         </div>
 
@@ -125,20 +137,20 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             className="group relative inline-flex items-center justify-center gap-3 px-8 sm:px-12 py-4 sm:py-5 rounded-full font-orbitron font-black text-lg sm:text-xl text-black bg-gradient-to-r from-[#00ff88] via-[#00d4ff] to-[#00ff88] bg-[length:200%_auto] hover:bg-right transition-all duration-300 shadow-[0_0_40px_rgba(0,255,136,0.5)] hover:shadow-[0_0_65px_rgba(0,255,136,0.85)] hover:scale-105 cursor-pointer"
           >
             <Play className="w-6 h-6 fill-black group-hover:translate-x-1 transition-transform" />
-            <span>START FREE MINING NOW</span>
+            <span>{copy.ctaStartMining}</span>
           </button>
           
-          <p className="mt-3 text-xs sm:text-sm text-gray-400 flex items-center justify-center gap-3">
+          <p className="mt-3 text-xs sm:text-sm text-gray-400 flex flex-wrap items-center justify-center gap-3">
             <span className="flex items-center gap-1 text-[#00ff88]">
-              <CheckCircle className="w-3.5 h-3.5" /> No wallet needed
+              <CheckCircle className="w-3.5 h-3.5" /> {copy.ctaNoWallet}
             </span>
             <span>•</span>
             <span className="flex items-center gap-1 text-[#00d4ff]">
-              <ShieldCheck className="w-3.5 h-3.5" /> 100% Zero Investment
+              <ShieldCheck className="w-3.5 h-3.5" /> {copy.ctaZeroInvestment}
             </span>
             <span>•</span>
             <span className="flex items-center gap-1 text-purple-300">
-              <Cpu className="w-3.5 h-3.5" /> 0% Hardware Load
+              <Cpu className="w-3.5 h-3.5" /> {copy.ctaZeroLoad}
             </span>
           </p>
         </div>
@@ -147,34 +159,34 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-4xl mx-auto mb-8 text-left">
           <div className="p-3.5 rounded-xl bg-black/40 border border-white/10">
             <div className="text-[#00ff88] font-bold text-xs font-orbitron mb-1 flex items-center gap-1.5">
-              <Cpu className="w-4 h-4" /> 100% IN-BROWSER
+              <Cpu className="w-4 h-4" /> {copy.feat1Title}
             </div>
             <p className="text-[11px] text-gray-400 leading-snug">
-              Simulation runs smoothly without burning CPU or consuming device battery.
+              {copy.feat1Desc}
             </p>
           </div>
           <div className="p-3.5 rounded-xl bg-black/40 border border-white/10">
             <div className="text-[#00d4ff] font-bold text-xs font-orbitron mb-1 flex items-center gap-1.5">
-              <Flame className="w-4 h-4" /> 12+ TOP COINS
+              <Flame className="w-4 h-4" /> {copy.feat2Title}
             </div>
             <p className="text-[11px] text-gray-400 leading-snug">
-              Simulate Bitcoin (SHA-256), Ethereum, Solana, Doge, Kaspa, Ton & LTC.
+              {copy.feat2Desc}
             </p>
           </div>
           <div className="p-3.5 rounded-xl bg-black/40 border border-white/10">
             <div className="text-purple-400 font-bold text-xs font-orbitron mb-1 flex items-center gap-1.5">
-              <Globe2 className="w-4 h-4" /> 42 LANGUAGES
+              <Globe2 className="w-4 h-4" /> {copy.feat3Title}
             </div>
             <p className="text-[11px] text-gray-400 leading-snug">
-              Localized for over 180 countries across Europe, Asia, Americas & Africa.
+              {copy.feat3Desc}
             </p>
           </div>
           <div className="p-3.5 rounded-xl bg-black/40 border border-white/10">
             <div className="text-yellow-400 font-bold text-xs font-orbitron mb-1 flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4" /> ZERO RISK
+              <ShieldCheck className="w-4 h-4" /> {copy.feat4Title}
             </div>
             <p className="text-[11px] text-gray-400 leading-snug">
-              Purely educational simulator. Safe for students, beginners & enthusiasts.
+              {copy.feat4Desc}
             </p>
           </div>
         </div>

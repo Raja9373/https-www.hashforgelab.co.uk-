@@ -52,6 +52,8 @@
     <!-- SEO: Title & Meta Description (Length & CTR Optimized) -->
     <title>Hashforge Lab – Free Crypto Mining Simulator | BTC ETH SOL</title>
     <meta name="description" content="World's #1 free crypto mining simulator. Mine Bitcoin, Ethereum &amp; Solana with zero hardware load and 0 electricity bills. 42 languages, 100% safe." />
+
+
     <meta name="keywords" content="free crypto mining, free bitcoin mining simulator, top 20 crypto 1 minute price prediction, which crypto will rise next minute, crypto rising and falling status live, real time 1 minute crypto trend forecaster, mine ethereum free online, solana mining simulator, dogecoin free mining, फ्री बिटकॉइन माइनिंग, हर मिनट क्रिप्टो प्रेडिक्शन, कौन सा कॉइन ऊपर जाएगा और कौन सा नीचे, मुफ्त क्रिप्टो माइनिंग, minería de criptomonedas gratis, prediccion de criptomonedas cada minuto, que criptomoneda subira o bajara, simulador mineria bitcoin, تعدين بيتكوين مجاني, محاكي تعدين العملات الرقمية, minage crypto gratuit, kostenloses krypto mining, бесплатный майнинг криптовалют, 無料暗号資産マイニング, mineração de criptomoedas grátis, 免费加密货币挖矿, ücretsiz kripto madenciliği, đào coin miễn phí, mining kripto gratis, ขุดคริปโตฟรี, darmowy mining kryptowalut, gratis crypto mining, безкоштовний майнінг, 무료 크립토 채굴, mining criptovalute gratuito, مفت بٹ کوائن مائننگ, ফ্রি ক্রিপ্টো মাইনিং, hashforgelab.co.uk" />
     <meta name="author" content="Hashforge Lab" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
@@ -71,12 +73,11 @@
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    <!-- Canonical & Universal x-default Resolution -->
-    <link rel="canonical" href="https://www.hashforgelab.co.uk/" />
+    <!-- Universal x-default & 42-Language Hreflang Resolution (Canonical Self-Referencing Handled Above) -->
     <link rel="alternate" hreflang="x-default" href="https://www.hashforgelab.co.uk/" />
 
     <!-- GEO / Hreflang for 42 Languages (ISO 639-1 / BCP 47) -->
-    <link rel="alternate" hreflang="en" href="https://www.hashforgelab.co.uk/?lang=en" />
+    <link rel="alternate" hreflang="en" href="https://www.hashforgelab.co.uk/" />
     <link rel="alternate" hreflang="hi" href="https://www.hashforgelab.co.uk/?lang=hi" />
     <link rel="alternate" hreflang="es" href="https://www.hashforgelab.co.uk/?lang=es" />
     <link rel="alternate" hreflang="ar" href="https://www.hashforgelab.co.uk/?lang=ar" />
@@ -150,6 +151,90 @@
     <meta name="twitter:description" content="Free crypto mining simulator - Mine BTC, ETH, SOL without hardware! 42 languages, 180+ countries. www.hashforgelab.co.uk" />
     <meta name="twitter:image" content="https://www.hashforgelab.co.uk/og-image.svg" />
     <meta name="twitter:image:alt" content="Hashforge Lab Free Crypto Mining Simulator Banner" />
+
+    <!-- Synchronous Head Canonical & Locale Bootstrapper (Prevents SPA Stage-1 Canonical Mismatch on ?lang= and ?section=) -->
+    <script>
+      (function() {
+        try {
+          var params = new URLSearchParams(window.location.search);
+          var lang = (params.get('lang') || '').toLowerCase();
+          var section = (params.get('section') || '').toLowerCase();
+          var baseUrl = 'https://www.hashforgelab.co.uk/';
+          var canonicalUrl = baseUrl;
+
+          var headMeta = {
+            zh: {
+              title: 'Hashforge Lab – 免费加密货币挖矿模拟器 | 比特币 以太坊 Solana',
+              desc: '全球领先的免费浏览器加密货币挖矿模拟器。零硬件损耗、零电费成本，安全模拟比特币 (BTC)、以太坊 (ETH)、Solana (SOL) 及12+主流币种工作量证明。'
+            },
+            pt: {
+              title: 'Hashforge Lab – Simulador Gratuito de Mineração Cripto | BTC ETH SOL',
+              desc: 'O simulador educativo gratuito nº 1 de mineração cripto no navegador. Simule Bitcoin, Ethereum e Solana com zero desgaste de hardware e 0 conta de luz.'
+            },
+            fr: {
+              title: 'Hashforge Lab – Simulateur de Minage Crypto Gratuit | BTC ETH SOL',
+              desc: 'Simulateur éducatif gratuit de minage crypto dans le navigateur. Simulez Bitcoin, Ethereum et Solana sans matériel coûteux ni facture d’électricité.'
+            },
+            es: {
+              title: 'Hashforge Lab – Simulador de Minería Cripto Gratis | BTC ETH SOL',
+              desc: 'Simulador educativo gratuito #1 de minería cripto en tu navegador. Simula Bitcoin, Ethereum y Solana sin gastar electricidad ni dañar tu hardware.'
+            },
+            hi: {
+              title: 'Hashforge Lab – मुफ़्त क्रिप्टो माइनिंग सिम्युलेटर | BTC ETH SOL',
+              desc: 'दुनिया का #1 मुफ़्त ब्राउज़र क्रिप्टो माइनिंग सिम्युलेटर। बिना किसी हार्डवेयर या बिजली खर्च के Bitcoin, Ethereum और Solana की सुरक्षित माइनिंग सीखें।'
+            },
+            ar: {
+              title: 'Hashforge Lab – محاكي تعدين العملات الرقمية مجاناً | بيتكوين إيثريوم سولانا',
+              desc: 'أقوى محاكي تعليمي مجاني لتعدين العملات المشفرة عبر المتصفح. جرب تعدين البيتكوين والإيثريوم وسولانا بدون أجهزة تعدين وبدون فاتورة كهرباء.'
+            },
+            de: {
+              title: 'Hashforge Lab – Kostenloser Krypto-Mining-Simulator | BTC ETH SOL',
+              desc: 'Der führende kostenlose Browser-Simulator für Krypto-Mining. Simuliere Bitcoin, Ethereum & Solana mit 0 Watt Hardware-Last und ohne Stromkosten.'
+            },
+            ru: {
+              title: 'Hashforge Lab – Бесплатный симулятор майнинга криптовалют | BTC ETH SOL',
+              desc: 'Ведущий бесплатный браузерный симулятор майнинга. Изучайте майнинг Bitcoin, Ethereum и Solana без нагрузки на видеокарту и без счетов за электричество.'
+            },
+            ja: {
+              title: 'Hashforge Lab – 無料暗号資産マイニングシミュレーター | BTC ETH SOL',
+              desc: '世界最先端の無料ブラウザ暗号資産マイニングシミュレーター。ハードウェア負荷ゼロ・電気代ゼロで、ビットコイン、イーサリアム、ソラナの仕組みを安全に体験。'
+            },
+            tr: {
+              title: 'Hashforge Lab – Ücretsiz Kripto Madencilik Simülatörü | BTC ETH SOL',
+              desc: 'Donanım yükü ve elektrik faturası olmadan tarayıcıda ücretsiz Bitcoin, Ethereum ve Solana madenciliğini simüle edin. 42 dilde %100 güvenli eğitim platformu.'
+            }
+          };
+
+          if (lang && lang !== 'en') {
+            document.documentElement.lang = lang === 'ng' ? 'en-NG' : lang;
+            canonicalUrl = baseUrl + '?lang=' + encodeURIComponent(lang);
+            if (headMeta[lang]) {
+              document.title = headMeta[lang].title;
+              var descEl = document.querySelector('meta[name="description"]');
+              if (descEl) descEl.setAttribute('content', headMeta[lang].desc);
+              var ogTitle = document.querySelector('meta[property="og:title"]');
+              if (ogTitle) ogTitle.setAttribute('content', headMeta[lang].title);
+              var ogDesc = document.querySelector('meta[property="og:description"]');
+              if (ogDesc) ogDesc.setAttribute('content', headMeta[lang].desc);
+              var twTitle = document.querySelector('meta[name="twitter:title"]');
+              if (twTitle) twTitle.setAttribute('content', headMeta[lang].title);
+              var twDesc = document.querySelector('meta[name="twitter:description"]');
+              if (twDesc) twDesc.setAttribute('content', headMeta[lang].desc);
+            }
+          } else if (section) {
+            canonicalUrl = baseUrl + '?section=' + encodeURIComponent(section);
+          }
+
+          var ogUrl = document.querySelector('meta[property="og:url"]');
+          if (ogUrl) ogUrl.setAttribute('content', canonicalUrl);
+
+          var link = document.createElement('link');
+          link.setAttribute('rel', 'canonical');
+          link.setAttribute('href', canonicalUrl);
+          document.head.appendChild(link);
+        } catch (e) {}
+      })();
+    </script>
 
     <!-- AEO & Search Engine Schema.org Graph (JSON-LD) -->
     <!-- Covers WebApplication, Organization, WebSite, TechArticle, FAQPage, HowTo, BreadcrumbList, and ItemList -->
